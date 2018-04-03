@@ -29,6 +29,7 @@
   <script>
       var scene, camera, renderer, controls, stats;
       var shuttle, external_tank, razzo_dx, razzo_sx;
+      var time, durataAnimazione;
 
       function Start() {
         // chiamo le funzioni di costruzione del paesaggio e dello space shuttle
@@ -52,6 +53,9 @@
         shuttle.add(razzo_dx);
         shuttle.add(razzo_sx);
         scene.add(shuttle);
+
+        time = Date.now();
+        durataAnimazione = 14000;
 
         //RIQUADRO FPS
         stats = new Stats();
@@ -256,7 +260,7 @@
 
         alfa = 0;
         var h = 3;
-        n = 180;
+        n = 90;
         while (alfa < n) {
           i = 0;
           larghezza_propulsori_temp = larghezza_shuttle/3;
@@ -307,6 +311,7 @@
           alfa += 15;
         }
 
+        n = 180;
         alfa = 0;
         h = 6;
         while (alfa < n) {
@@ -338,7 +343,7 @@
 
         var razzo_base_geometry = new THREE.BoxGeometry(larghezza_razzo, altezza_razzo, spessore_razzo);
 
-        n = 180;
+        n = 90;
         var alfa = 0;
         var posx = larghezza_tank/2 + larghezza_razzo;
         while (alfa < n) {
@@ -424,6 +429,13 @@
       }
     }
 
+    function Launch() {
+      var currentTime = Date.now();
+      if (currentTime - time < durataAnimazione) {
+        shuttle.position.y += 0.1;
+      }
+    }
+
       function Update() {
         requestAnimationFrame(Update);
         controls.update();
@@ -434,6 +446,7 @@
 
       function Render() {
         renderer.render(scene, camera);
+        Launch();
       }
 
       Start();

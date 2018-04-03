@@ -29,6 +29,8 @@
       var scene, camera, renderer, controls, stats;
       var tower, tower_arm_base, tower_arm_top;
 
+      var durataAnimazione, time;
+
       function Start() {
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.01, 1000);
@@ -50,6 +52,9 @@
         tower.add(tower_mid_arm_top);
         tower.add(tower_top_arm);
         scene.add(tower);
+
+        time = Date.now();
+        durataAnimazione = 14000;
 
         //RIQUADRO FPS
         stats = new Stats();
@@ -186,13 +191,17 @@
           altezza -= altezza_tower/30;
           y += altezza;
           i ++;
+
         }
       }
 
-    /*  function Arm_detouchment() {
-        tower_top_arm.rotation.y -= Math.PI * 0.1 /180;
-        tower_mid_arm_top.position.x -= 0.05;
-      }*/
+      function Arm_detouchment() {
+        var currentTime = Date.now();
+        if (currentTime - time < durataAnimazione) {
+          tower_top_arm.rotation.y -= Math.PI * 0.1 /180;
+          tower_mid_arm_top.position.x -= 0.05;
+        }
+      }
 
       function Update() {
         requestAnimationFrame(Update);
@@ -204,7 +213,7 @@
 
       function Render() {
         renderer.render(scene, camera);
-        //Arm_detouchment();
+        Arm_detouchment();
       }
 
       Start();
