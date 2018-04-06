@@ -27,29 +27,32 @@
         <script>
             var scene, camera, renderer, controls, stats;
             //variabili per lo shuttle
-            var shuttle, external_tank, razzo_dx, razzo_sx;
+            var shuttle, external_tank, razzo_dx, razzo_sx, propulsore1, propulsore2, propulsore3;
             var larghezza_shuttle, altezza_shuttle, spessore_shuttle;
             var durataAnimazione, time;
 
             //variabili per la torre
             var larghezza_tower, altezza_tower, spessore_tower;
-            var tower, tower_arm_base, tower_arm_top;
+            var tower, tower_top_arm, tower_mid_arm_top, tower_mid_arm_base;
             var angolo;
 
             //variabili per la base di lancio
             var larghezza_base, altezza_base, spessore_base;
             var launch_base;
 
+            //variabili per il fumo
+            var smoke_column;
+
             function Start() { //chiamo le funzioni di costruzione del paesaggio e dello space shuttle
                 scene = new THREE.Scene();
-                camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.01, 1000);
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000);
 
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setClearColor(0x3333aa);
                 document.body.appendChild(renderer.domElement);
 
-                camera.position.set(75,100,150);
+                camera.position.set(150,200,300);
                 camera.lookAt( new THREE.Vector3(0,0,0));
 
                 //dimensioni del blocco centrale, su cui vengono proporzionate tutte le altre componenti
@@ -68,6 +71,9 @@
                 spessore_base = 200;
 
                 shuttle = new THREE.Object3D();
+                propulsore1 = new THREE.Object3D();
+                propulsore2 = new THREE.Object3D();
+                propulsore3 = new THREE.Object3D();
                 Shuttle(); //costruisce lo shuttle comprensivo di ali e propulsori sottostanti
 
                 external_tank = new THREE.Object3D();
@@ -85,7 +91,11 @@
                 Razzo(razzo_sx, pos);
                 shuttle.add(razzo_sx);
 
-                //flames_group = new THREE.Object3D();
+                smoke_column = new THREE.Object3D();
+                Smoke_creation(larghezza_shuttle*2);
+
+                flames_group = new THREE.Object3D();
+                Flames_creation();
 
                 shuttle.position.set(-(larghezza_tower/3), altezza_shuttle*1.4, 0);
 
@@ -113,7 +123,7 @@
                 scene.add(launch_base);
 
                 time = Date.now();
-                durataAnimazione = 14000;
+                durataAnimazione = 20000;
 
                 //riquadro fps
                 stats = new Stats();
@@ -130,7 +140,7 @@
 
             }
 
-            function Flames_creation(dimx, dimy, dimz, pivot) {
+            function Flames_creation(dim, pivot) {
                 var flames_geometry = new THREE.BoxGeometry(1,1,1);
                 var flames_materials = new Array();
                 flames_materials[0] = new THREE.MeshBasicMaterial({ color:  0xfe0002 });
@@ -143,27 +153,105 @@
                 for (var i = 0; i < 200; i++) {
                   flames[i] = new THREE.Mesh(flames_geometry, flames_materials[Math.trunc(Math.random()*(flames_materials.length))]);
 
-                  var x = Math.random()* dimx - dimx/2;
-                  var z = Math.random()* dimz - dimz/2;
+                  var x = Math.random()* dim - dim/2;
+                  var z = Math.random()* dim - dim/2;
 
-                  while (x*x + z*z > Math.pow((dimx/2), 2)) {
-                      var x = Math.random()* dimx - dimx/2;
-                      var z = Math.random()* dimz - dimz/2;
+                  while (x*x + z*z > Math.pow((dim/2), 2)) {
+                      var x = Math.random()* dim - dim/2;
+                      var z = Math.random()* dim - dim/2;
                   }
                   flames[i].position.set(x, 0, z);
                 }
             }
 
-            function Flames_animation() {
+            function Flames_animation(dim, pivot) {
+                var d = 0;
+                while (d < flames.length) {
+                    var h = d;
+                    while (h < d+3) {
+                        flames_group.add(flames[h]);
+                        h ++;
+                    }
+                    for (var i = 0; i < flames_group.children.length; i++) {
+                        var posx = flames_group.children[i].position.x;
+                        var posy = flames_group.children[i].position.y;
+                        var posz = flames_group.children[i].position.z;
+                        posy -= 0.05;
 
+                        if (posy <= flames_group.position.y - 40 + 3*(Math.abs(posx) + Math.abs(posz))) {
+                            var x = Math.random()* dim - dim/2;
+                            var z = Math.random()* dim - dim/2;
+
+                            while (x*x + z*z > Math.pow((dim/2), 2)) {
+                                var x = Math.random()* dim - dim/2;
+                                var z = Math.random()* dim - dim/2;
+                            }
+
+                            flames_group.children[i].position.set(x, (pivot.position.y - (Height(pivot))) , z);
+                        } else {
+                            flames_group.children[i].position.y = posy;
+                        }
+                    }
+                    d += 3;
+                }
+                flames_group.position.set(pivot.position.x, 0, pivot.position.z);
+                scene.add(flames_group);
             }
 
-            function Smoke_creation() {
+            function Smoke_creation(dim) {
+                var smoke_geometry = new THREE.BoxGeometry(2,2,2);
+                var smoke_material = new THREE.MeshBasicMaterial({ color: 0xcccccc});
+                smoke = new Array();
+                for (var i = 0; i < 1000; i++) {
+                    smoke[i] = new THREE.Mesh(smoke_geometry, smoke_material);
 
+                    var x = Math.random()* dim - dim/2;
+                    var z = Math.random()* dim - dim/2;
+
+                    while (x*x + z*z > Math.pow((dim/2), 2)) {
+                        var x = Math.random()* dim - dim/2;
+                        var z = Math.random()* dim - dim/2;
+                    }
+                    smoke[i].position.set(x, 0, z);
+                }
             }
 
-            function Smoke_animation() {
-              
+            function Smoke_animation(dim) {
+                var d = 0;
+                while (d < smoke.length) {
+                    var h = d;
+                    while (h < d+3) {
+                        smoke_column.add(smoke[h]);
+                        h ++;
+                    }
+                    for (var i = 0; i < smoke_column.children.length; i++) {
+                        var posx = smoke_column.children[i].position.x;
+                        var posy = smoke_column.children[i].position.y;
+                        var posz = smoke_column.children[i].position.z;
+                        posy -= 0.5;
+                        var soglia;
+                        if (shuttle.position.y <= 300) {
+                            soglia = 0;
+                        } else {
+                            soglia = shuttle.position.y - 300;
+                        }
+                        if (posy <= soglia) {
+                          var x = Math.random()* dim - dim/2;
+                          var z = Math.random()* dim - dim/2;
+
+                          while (x*x + z*z > Math.pow((dim/2), 2)) {
+                              var x = Math.random()* dim - dim/2;
+                              var z = Math.random()* dim - dim/2;
+                          }
+                          smoke_column.children[i].position.set(x, (shuttle.position.y - altezza_shuttle), z);
+                        } else {
+                          smoke_column.children[i].position.y = posy;
+                        }
+                    }
+                    d += 3;
+                }
+                smoke_column.position.set(shuttle.position.x, 0, shuttle.position.z);
+                scene.add(smoke_column);
             }
 
             function Launch_base() {
@@ -252,7 +340,7 @@
                 x = larghezza_tower;
                 z = larghezza_tower/2 - altezza_tower/30;
                 var mid_arm_base_geometry = new THREE.BoxGeometry(larghezza_tower, altezza_tower/15, altezza_tower/15);
-                tower_mid_arm_base = new THREE.Mesh(mid_arm_base_geometry, tower_grey_material);
+                var tower_mid_arm_base = new THREE.Mesh(mid_arm_base_geometry, tower_grey_material);
                 tower_mid_arm_base.position.set(x, y, z);
                 tower.add(tower_mid_arm_base);
 
@@ -522,19 +610,19 @@
                         var propulsori_geometry = new THREE.BoxGeometry(larghezza_propulsori_temp, altezza_propulsori_temp, spessore_propulsori_temp);
 
                         var mesh_propulsori1 = new THREE.Mesh(propulsori_geometry, grey_material);
-                        mesh_propulsori1.position.set(- larghezza_shuttle/3, -y, - spessore_shuttle/4);
+                        mesh_propulsori1.position.set(0, -y, 0);
                         mesh_propulsori1.rotation.y = Math.PI * alfa / 180;
-                        shuttle.add(mesh_propulsori1);
+                        propulsore1.add(mesh_propulsori1);
 
                         var mesh_propulsori2 = new THREE.Mesh(propulsori_geometry, grey_material);
-                        mesh_propulsori2.position.set(+ larghezza_shuttle/3, -y, - spessore_shuttle/4);
+                        mesh_propulsori2.position.set(0, -y, 0);
                         mesh_propulsori2.rotation.y = Math.PI * alfa / 180;
-                        shuttle.add(mesh_propulsori2);
+                        propulsore2.add(mesh_propulsori2);
 
                         var mesh_propulsori3 = new THREE.Mesh(propulsori_geometry, grey_material);
-                        mesh_propulsori3.position.set(0, -y, + larghezza_shuttle/4);
+                        mesh_propulsori3.position.set(0, -y, 0);
                         mesh_propulsori3.rotation.y = Math.PI * alfa / 180;
-                        shuttle.add(mesh_propulsori3);
+                        propulsore3.add(mesh_propulsori3);
 
                         larghezza_propulsori_temp -= larghezza_shuttle/20;
                         spessore_propulsori_temp -= larghezza_shuttle/20;
@@ -543,6 +631,12 @@
                     }
                     alfa += 15;
                 }
+                propulsore1.position.set(- larghezza_shuttle/3, propulsore1.position.y, - spessore_shuttle/4);
+                shuttle.add(propulsore1);
+                propulsore2.position.set(+ larghezza_shuttle/3, propulsore1.position.y, - spessore_shuttle/4);
+                shuttle.add(propulsore2);
+                propulsore3.position.set(propulsore3.position.x, propulsore1.position.y, + larghezza_shuttle/4);
+                shuttle.add(propulsore3);
             }
 
             function External_tank() { //costruzione del serbatoio
@@ -683,6 +777,24 @@
                     tower_mid_arm_top.position.x -= 0.05;
                 }
                 angolo += 0.1;
+                time = Date.now();
+            }
+
+            function Launch() {
+                var currentTime = Date.now();
+                if (currentTime - time < durataAnimazione) {
+                    shuttle.position.y += 0.5;
+                    Flames_animation();
+                    Smoke_animation(larghezza_shuttle*2);
+                }
+            }
+
+            function Animation() {
+              if (angolo <= 90) {
+                  Arm_detouchment();
+              } else {
+                  Launch();
+              }
             }
 
             function Update() {
@@ -695,9 +807,7 @@
 
             function Render() {
                 renderer.render(scene, camera);
-                Arm_detouchment();
-                //Launch();
-                //Flames_animation();
+                Animation();
             }
 
             Start();
