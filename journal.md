@@ -22,6 +22,7 @@
     * dichiarazione e istanziazione delle variabili propulsori_geometry, mesh_propulsori, mesh_propulsori1, mesh_propulsori2, mesh_propulsori3.
 * Posizionamento dei propulsori dello space shuttle in modo che si trovino sotto al corpo principale, attaccati ad esso.
 * Costruzione del serbatoio esterno allo space shuttle:
+    * definizione della funzione External_tank();
     * impostazione delle misure delle misure del serbatoio in proporzione alle misure del corpo principale;
     * dichiarazione e istanziazione delle variabili orange_material, tank_base_geomtery, external_tank_base, tank_punta_geometry, external_tank_punta.
 * Posizionamento del serbatoio esterno allo space shuttle in modo che si trovi allineato al corpo principale, dal lato nero, e rialzato rispetto al "terreno".
@@ -29,6 +30,7 @@
 
 ## 29-03-2018
 * Costruzione dei razzi laterali dello space shuttle:
+    * definizione della funzione Razzo();
     * impostazione delle misure dei razzi in proporzione alle misure del corpo principale;
     * dichiarazione e istanziazione delle viariabili white_material, razzo_base_geometry, razzo_base, razzo_punta_geometry, razzo_punta, razzo_propulsori_geometry, razzo_propulsori.
 * Posizionamento dei razzi laterali dello space shuttle in modo che si trovino ai lati del serbatoio centrale, attaccati ad esso (sono due razzi sostanzialmente uguali ma distinti solo per la variabile pos in sinistro e destro).
@@ -36,9 +38,15 @@
 
 ## 30-03-2018
 * Costruzione della torre di lancio dello space shuttle:
+    * definizione della funzione Tower();
     * impostazione delle misure della torre indipendentemente dalle dimensioni dello space shuttle;
     * dichiarazione e istanziazione delle variabili tower_grey_material, tower_base_geometry, tower_column_geometry, tower_base_column_geometry, tower_column1, tower_column2, tower_column3, tower_column4, tower_base_column, tower_base per la creazione del corpo principale;
     * dichiarazione e istanziazione delle variabili tower_mid_arm_base, tower_mid_arm_top, tower_top_arm, mid_arm_base_geometry, tower_mid_arm_base, mid_arm_top_geometry,tower_mid_arm_top, top_arm_geometry, tower_top_arm1, arm_connections_geometry, tower_arm_connection, shuttle_arm_connection, tower_punta_geometry, tower_punta per la creazione delle braccia e della punta della torre.
 * Posizionamento della torre di lancio dello space shuttle in modo che si trovi al suo lato e le braccia siano attaccate alla sua punta e al suo corpo principale.
 
 ## 31-03-2018
+* Costruzione della piattaforma di lancio dello space shuttle:
+    * definizione della funzione Launch_base();
+    * impostazione delle misure della piattaforma indipendentemente dalle dimensioni dello space shuttle e della torre di lancio;
+    * dichiarazione e istanziazione delle variabili launch_base, base_material, base_column_geometry, base_column1, base_column2, base_column3, base_column4, base_plain_geometry, base_plain.
+* Posizionamento della piattaforma di lancio dello space shuttle in modo che si trovi al di sotto di esso e attaccato ad esso.
