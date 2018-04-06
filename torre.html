@@ -29,7 +29,7 @@
       var scene, camera, renderer, controls, stats;
       var tower, tower_arm_base, tower_arm_top;
 
-      var durataAnimazione, time;
+      var durataAnimazione, time, angolo;
 
       function Start() {
         scene = new THREE.Scene();
@@ -41,7 +41,7 @@
         document.body.appendChild(renderer.domElement);
 
         camera.position.set(200,300,250);
-        camera.lookAt(0,0,0);
+        camera.lookAt(new THREE.Vector3(0,0,0));
 
         tower = new THREE.Object3D();
         tower_mid_arm_base = new THREE.Object3D();
@@ -53,8 +53,7 @@
         tower.add(tower_top_arm);
         scene.add(tower);
 
-        time = Date.now();
-        durataAnimazione = 14000;
+        angolo = 0;
 
         //RIQUADRO FPS
         stats = new Stats();
@@ -83,7 +82,7 @@
         var tower_column_geometry = new THREE.BoxGeometry(larghezza_tower/10, altezza_tower/5, spessore_tower/10);
         var tower_base_column_geometry = new THREE.BoxGeometry(larghezza_tower/2, altezza_tower/5, spessore_tower/2);
 
-        var a = 0;
+        /*var a = 0;
         var n = 5;
         var i = 0;
         var y = 0;
@@ -121,6 +120,42 @@
             a = 1;
             y += altezza_tower/10 + altezza_tower/40;
           }
+        }*/
+        var n = 5;
+        var i = 0;
+        var y = 0;
+        var x = larghezza_tower/2 - larghezza_tower/20;
+        var z = larghezza_tower/2 - larghezza_tower/20;
+        while(i < n){
+          var tower_column1 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+          tower_column1.position.set(-x, y, -z);
+          tower.add(tower_column1);
+
+          var tower_column2 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+          tower_column2.position.set(x, y, -z);
+          tower.add(tower_column2);
+
+          var tower_column3 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+          tower_column3.position.set(x, y, z);
+          tower.add(tower_column3);
+
+          var tower_column4 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+          tower_column4.position.set(-x, y, z);
+          tower.add(tower_column4);
+
+          var tower_base_column = new THREE.Mesh(tower_base_column_geometry, tower_grey_material);
+          tower_base_column.position.set(0, y, 0);
+          tower.add(tower_base_column);
+
+          y += altezza_tower/10 + altezza_tower/40;
+
+          var tower_base = new THREE.Mesh(tower_base_geometry, tower_grey_material);
+          tower_base.position.set(0, y, 0);
+          tower.add(tower_base);
+
+          y += altezza_tower/10 + altezza_tower/40;
+          i ++;
+
         }
 
         //BRACCIA DELLA TORRE
@@ -196,11 +231,16 @@
       }
 
       function Arm_detouchment() {
-        var currentTime = Date.now();
+/*        var currentTime = Date.now();
         if (currentTime - time < durataAnimazione) {
           tower_top_arm.rotation.y -= Math.PI * 0.1 /180;
           tower_mid_arm_top.position.x -= 0.05;
+        }*/
+        if (angolo <= 90) {
+          tower_top_arm.rotation.y -= Math.PI * 0.1 / 180;
+          tower_mid_arm_top.position.x -= 0.05;
         }
+        angolo += 0.1;
       }
 
       function Update() {
