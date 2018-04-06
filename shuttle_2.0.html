@@ -1,121 +1,116 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Space Shuttle tests struttura</title>
-
-    <style>
-
-    body {
-      font-family: Monospace;
-      background-color: #f0f0f0;
-      margin: 0px;
-      overflow: hidden;
-    }
-
-    canvas {
-      width: 100%;
-      height: 100%;
-    }
-
-  </style>
-  <script src="lib/three.js"></script>
-  <script src="lib/stats.min.js"></script>
-  <script src="lib/Coordinates.js"></script>
-  <script src="lib/OrbitControls.js"></script>
-
-</head>
-<body>
-  <script>
-    var scene, camera, renderer, controls, stats;
-    var shuttle, external_tank, razzo_dx, razzo_sx;
-    var larghezza_shuttle, altezza_shuttle, spessore_shuttle;
-      
-    //VARIABILI PER LA TORRE
-    var tower, tower_arm_base, tower_arm_top;
-    var durataAnimazione, time, angolo;
-
-    function Start() {
-      // chiamo le funzioni di costruzione del paesaggio e dello space shuttle
-      scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.01, 1000);
-
-      renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setClearColor(0x3333aa);
-      document.body.appendChild(renderer.domElement);
-
-      camera.position.set(75,100,150);
-      camera.lookAt( new THREE.Vector3(0,0,0));
+    <head>
+        <title>Space Shuttle tests struttura</title>
         
-      //dimensioni del blocco centrale, su cui vengono proporzionate tutte le altre compoinenti
-      larghezza_shuttle = 30;
-      altezza_shuttle = 100;
-      spessore_shuttle = 15;
+        <style>
+            body {
+                font-family: Monospace;
+                background-color: #f0f0f0;
+                margin: 0px;
+                overflow: hidden;
+            }
 
-      shuttle = new THREE.Object3D();
-      Shuttle(); //costruisce lo shuttle comprensivo di ali e propulsori sottostanti
+            canvas {
+                width: 100%;
+                height: 100%;
+            }
 
-      external_tank = new THREE.Object3D();
-      External_tank(); //costruisce il serbatoio centrale
-      shuttle.add(external_tank);
-
-      //costruzione dei razzi destro e sinistro, pos serve a distinguerli al momento di posizionarli nella funzione Razzo()
-      var pos = 0;
-      razzo_dx = new THREE.Object3D();
-      Razzo(razzo_dx, pos);
-      shuttle.add(razzo_dx);
-
-      pos = 1;
-      razzo_sx = new THREE.Object3D();
-      Razzo(razzo_sx, pos);
-      shuttle.add(razzo_sx);
-
-//      flames_group = new THREE.Object3D();
-
-      scene.add(shuttle);
+        </style>
         
-      //AGGIUNTA DELLA TORRE
-      tower = new THREE.Object3D();
-      tower_mid_arm_base = new THREE.Object3D();
-      tower_mid_arm_top = new THREE.Object3D();
-      tower_top_arm = new THREE.Object3D();
-      Tower();
-      tower.add(tower_mid_arm_base);
-      tower.add(tower_mid_arm_top);
-      tower.add(tower_top_arm);
-      scene.add(tower);
-      angolo = 0;
+        <script src="lib/three.min.js"></script>
+        <script src="lib/stats.min.js"></script>
+        <script src="lib/Coordinates.js"></script>
+        <script src="lib/OrbitControls.js"></script>
+    </head>
+    <body>
+        <script>
+            var scene, camera, renderer, controls, stats;
+            //variabili per lo shuttle
+            var shuttle, external_tank, razzo_dx, razzo_sx;
+            var larghezza_shuttle, altezza_shuttle, spessore_shuttle;  
+            //variabili per la torre
+            var tower, tower_arm_base, tower_arm_top;
+            var durataAnimazione, time, angolo;
+
+            function Start() { //chiamo le funzioni di costruzione del paesaggio e dello space shuttle
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.01, 1000);
+                renderer = new THREE.WebGLRenderer({ antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(0x3333aa);
+                document.body.appendChild(renderer.domElement);
+                camera.position.set(75,100,150);
+                camera.lookAt( new THREE.Vector3(0,0,0));
         
-      time = Date.now();
-      durataAnimazione = 14000;
+                //dimensioni del blocco centrale, su cui vengono proporzionate tutte le altre componenti
+                larghezza_shuttle = 30;
+                altezza_shuttle = 100;
+                spessore_shuttle = 15;
 
-      //RIQUADRO FPS
-      stats = new Stats();
-      stats.domElement.style.position = 'absolute';
-      stats.domElement.style.top = '0px';
-      document.body.appendChild(stats.domElement);
+                shuttle = new THREE.Object3D();
+                Shuttle(); //costruisce lo shuttle comprensivo di ali e propulsori sottostanti
 
-      //VISUALIZZO GLI ASSI
-      Coordinates.drawAllAxes();
+                external_tank = new THREE.Object3D();
+                External_tank(); //costruisce il serbatoio centrale
+                shuttle.add(external_tank);
 
-      //CONTROLLI ORBITALI
-      controls = new THREE.OrbitControls(camera);
-      controls.addEventListener('change', Render);
+                //costruzione dei razzi destro e sinistro, pos serve a distinguerli al momento di posizionarli nella funzione Razzo()
+                var pos = 0;
+                razzo_dx = new THREE.Object3D();
+                Razzo(razzo_dx, pos);
+                shuttle.add(razzo_dx);
 
-    }
+                pos = 1;
+                razzo_sx = new THREE.Object3D();
+                Razzo(razzo_sx, pos);
+                shuttle.add(razzo_sx);
 
-    function Tower() {
-        var altezza_tower = 200;
-        var larghezza_tower = 50;
-        var spessore_tower = 50;
+                //flames_group = new THREE.Object3D();
 
-        var tower_grey_material = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: true });
+                scene.add(shuttle);
+        
+                //aggiunta della torre
+                tower = new THREE.Object3D();
+                tower_mid_arm_base = new THREE.Object3D();
+                tower_mid_arm_top = new THREE.Object3D();
+                tower_top_arm = new THREE.Object3D();
+                Tower();
+                tower.add(tower_mid_arm_base);
+                tower.add(tower_mid_arm_top);
+                tower.add(tower_top_arm);
+                scene.add(tower);
+                angolo = 0;
+        
+                time = Date.now();
+                durataAnimazione = 14000;
 
-        //TORRE
+                //riquadro fps
+                stats = new Stats();
+                stats.domElement.style.position = 'absolute';
+                stats.domElement.style.top = '0px';
+                document.body.appendChild(stats.domElement);
 
-        var tower_base_geometry = new THREE.BoxGeometry(larghezza_tower, altezza_tower/20, spessore_tower);
-        var tower_column_geometry = new THREE.BoxGeometry(larghezza_tower/10, altezza_tower/5, spessore_tower/10);
-        var tower_base_column_geometry = new THREE.BoxGeometry(larghezza_tower/2, altezza_tower/5, spessore_tower/2);
+                //visualizzo gli assi
+                Coordinates.drawAllAxes();
+
+                //controlli orbitali
+                controls = new THREE.OrbitControls(camera);
+                controls.addEventListener('change', Render);
+
+            }
+
+            function Tower() {
+                var altezza_tower = 200;
+                var larghezza_tower = 50;
+                var spessore_tower = 50;
+
+                var tower_grey_material = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: true });
+
+                //torre
+                var tower_base_geometry = new THREE.BoxGeometry(larghezza_tower, altezza_tower/20, spessore_tower);
+                var tower_column_geometry = new THREE.BoxGeometry(larghezza_tower/10, altezza_tower/5, spessore_tower/10);
+                var tower_base_column_geometry = new THREE.BoxGeometry(larghezza_tower/2, altezza_tower/5, spessore_tower/2);
 
         /*var a = 0;
         var n = 5;
@@ -156,509 +151,505 @@
             y += altezza_tower/10 + altezza_tower/40;
           }
         }*/
-        var n = 5;
-        var i = 0;
-        var y = 0;
-        var x = larghezza_tower/2 - larghezza_tower/20;
-        var z = larghezza_tower/2 - larghezza_tower/20;
-        while(i < n){
-          var tower_column1 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
-          tower_column1.position.set(-x, y, -z);
-          tower.add(tower_column1);
-
-          var tower_column2 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
-          tower_column2.position.set(x, y, -z);
-          tower.add(tower_column2);
-
-          var tower_column3 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
-          tower_column3.position.set(x, y, z);
-          tower.add(tower_column3);
-
-          var tower_column4 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
-          tower_column4.position.set(-x, y, z);
-          tower.add(tower_column4);
-
-          var tower_base_column = new THREE.Mesh(tower_base_column_geometry, tower_grey_material);
-          tower_base_column.position.set(0, y, 0);
-          tower.add(tower_base_column);
-
-          y += altezza_tower/10 + altezza_tower/40;
-
-          var tower_base = new THREE.Mesh(tower_base_geometry, tower_grey_material);
-          tower_base.position.set(0, y, 0);
-          tower.add(tower_base);
-
-          y += altezza_tower/10 + altezza_tower/40;
-          i ++;
-
-        }
         
-        //BRACCIA DELLA TORRE
+                var n = 5;
+                var i = 0;
+                var y = 0;
+                var x = larghezza_tower/2 - larghezza_tower/20;
+                var z = larghezza_tower/2 - larghezza_tower/20;
+                while(i < n){
+                    var tower_column1 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+                    tower_column1.position.set(-x, y, -z);
+                    tower.add(tower_column1);
 
-        //BRACCIO DI MEZZO
-        y = altezza_tower/5 *2 + altezza_tower/10 *2 + altezza_tower/20 *3;
-        x = larghezza_tower;
-        z = larghezza_tower/2 - altezza_tower/30;
-        var mid_arm_base_geometry = new THREE.BoxGeometry(larghezza_tower, altezza_tower/15, altezza_tower/15);
-        tower_mid_arm_base = new THREE.Mesh(mid_arm_base_geometry, tower_grey_material);
-        tower_mid_arm_base.position.set(x, y, z);
-        tower.add(tower_mid_arm_base);
+                    var tower_column2 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+                    tower_column2.position.set(x, y, -z);
+                    tower.add(tower_column2);
 
-        x += larghezza_tower;
+                    var tower_column3 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+                    tower_column3.position.set(x, y, z);
+                    tower.add(tower_column3);
 
-        var mid_arm_top_geometry = new THREE.BoxGeometry(larghezza_tower, altezza_tower/20, altezza_tower/20);
-        tower_mid_arm_top = new THREE.Mesh(mid_arm_top_geometry, tower_grey_material);
-        tower_mid_arm_top.position.set(x, y, z);
-        tower.add(tower_mid_arm_top);
+                    var tower_column4 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+                    tower_column4.position.set(-x, y, z);
+                    tower.add(tower_column4);
 
-        //BRACCIO IN CIMA
-        y = altezza_tower/20 *5 + altezza_tower/5 *4 + altezza_tower/10 + altezza_tower/40;
-        x = (larghezza_tower * 2 + larghezza_tower/2)/2;
-        z = 0;
-        var top_arm_geometry = new THREE.BoxGeometry(larghezza_tower * 2 + larghezza_tower/2, altezza_tower/20, altezza_tower/20);
-        tower_top_arm1 = new THREE.Mesh(top_arm_geometry, tower_grey_material);
-        tower_top_arm1.position.set(x, y, z);
-        tower_top_arm.add(tower_top_arm1);
+                    var tower_base_column = new THREE.Mesh(tower_base_column_geometry, tower_grey_material);
+                    tower_base_column.position.set(0, y, 0);
+                    tower.add(tower_base_column);
 
-        x = 0;
-        y = altezza_tower/20 *5 + altezza_tower/5 *4 + altezza_tower/10 + altezza_tower/40;
-        z = 0;
-        var alfa = 0;
-        n = 90;
-        var arm_connections_geometry = new THREE.BoxGeometry(altezza_tower/30, altezza_tower/20, altezza_tower/30);
-        while (alfa < n) {
-          var tower_arm_connection = new THREE.Mesh(arm_connections_geometry, tower_grey_material);
-          tower_arm_connection.position.set(x, y, z);
-          tower_arm_connection.rotation.y = Math.PI * alfa / 180;
-          tower_top_arm.add(tower_arm_connection);
+                    y += altezza_tower/10 + altezza_tower/40;
 
-          var shuttle_arm_connection = new THREE.Mesh(arm_connections_geometry, tower_grey_material);
-          shuttle_arm_connection.position.set((larghezza_tower * 2 + larghezza_tower/2), (y - altezza_tower/40), z);
-          shuttle_arm_connection.rotation.y = Math.PI * alfa / 180;
-          tower_top_arm.add(shuttle_arm_connection);
+                    var tower_base = new THREE.Mesh(tower_base_geometry, tower_grey_material);
+                    tower_base.position.set(0, y, 0);
+                    tower.add(tower_base);
 
-          alfa += 15;
-        }
-        tower.add(tower_top_arm);
+                    y += altezza_tower/10 + altezza_tower/40;
+                    i ++;
 
-        //COSTRUZIONE PUNTA DELLA TORRE
-        var d = 3;
-        i = 0;
-        var raggio = altezza_tower/30;
-        var altezza = altezza_tower/5;
-        y = altezza_tower/20 *5 + altezza_tower/5 *4 + altezza_tower/10 + altezza_tower/20 + altezza_tower/20;
-        while (i < d) {
-          var tower_punta_geometry = new THREE.BoxGeometry(raggio, altezza, raggio);
-          alfa = 0;
-          while (alfa < n) {
-            var tower_punta = new THREE.Mesh(tower_punta_geometry, tower_grey_material);
-            tower_punta.position.set(x, y, z);
-            tower_punta.rotation.y = Math.PI * alfa / 180;
-            tower.add(tower_punta);
-            alfa += 15;
-          }
-          raggio -= altezza_tower/60;
-          altezza -= altezza_tower/30;
-          y += altezza;
-          i ++;
-
-        }
-      }
-      
-    function Shuttle() {
-      var white_material = new THREE.MeshBasicMaterial({ color: 0xfcfcfc, wireframe: false });
-      var black_material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: false });
-      var grey_material = new THREE.MeshBasicMaterial({ color: 0x222222, wireframe: false });
-
-      // COSTRUZIONE DEL CORPO DELLO SHUTTLE
-      var base_geometry = new THREE.BoxGeometry(larghezza_shuttle, altezza_shuttle, spessore_shuttle);
-      var base_shuttle = new THREE.Mesh(base_geometry, white_material);
-      shuttle.add(base_shuttle);
-
-      var base_geometry2 = new THREE.BoxGeometry(larghezza_shuttle-10, altezza_shuttle, spessore_shuttle/4);
-      var base_shuttle2 = new THREE.Mesh(base_geometry2, white_material);
-      base_shuttle2.position.set(0, 0, spessore_shuttle/2 + spessore_shuttle/8);
-      shuttle.add(base_shuttle2);
-
-      var base_geometry3 = new THREE.BoxGeometry(larghezza_shuttle-20, altezza_shuttle, spessore_shuttle/4);
-      var base_shuttle3 = new THREE.Mesh(base_geometry3, white_material);
-      base_shuttle3.position.set(0, 0, spessore_shuttle/2 + spessore_shuttle/4 + spessore_shuttle/8);
-      shuttle.add(base_shuttle3);
-
-      //costruzione della punta dello shuttle
-      var base_punta_geometry = new THREE.BoxGeometry(larghezza_shuttle, altezza_shuttle/15, spessore_shuttle/4 * 3);
-      var base_punta_shuttle = new THREE.Mesh(base_punta_geometry, white_material);
-      base_punta_shuttle.position.set(0, altezza_shuttle/2 + altezza_shuttle/30, -spessore_shuttle/8);
-      shuttle.add(base_punta_shuttle);
-
-      var black_punta_geometry = new THREE.BoxGeometry(larghezza_shuttle, altezza_shuttle + altezza_shuttle/15, spessore_shuttle/4);
-      var black_punta_shuttle = new THREE.Mesh(black_punta_geometry, black_material);
-      black_punta_shuttle.position.set(0, altezza_shuttle/30, - spessore_shuttle/8 *5);
-      shuttle.add(black_punta_shuttle);
-
-      var base_punta2_geometry = new THREE.BoxGeometry(larghezza_shuttle-20, altezza_shuttle/30, spessore_shuttle/4);
-      var base_punta2 = new THREE.Mesh(base_punta2_geometry, white_material);
-      base_punta2.position.set(0, altezza_shuttle/2 + altezza_shuttle/60, spessore_shuttle/2 + spessore_shuttle/8);
-      shuttle.add(base_punta2);
-
-      var base_punta3_geometry = new THREE.BoxGeometry(larghezza_shuttle-20, altezza_shuttle/15, spessore_shuttle/4);
-      var base_punta3 = new THREE.Mesh(base_punta3_geometry, black_material);
-      base_punta3.position.set(0, altezza_shuttle/2 + altezza_shuttle/30, spessore_shuttle/2 - spessore_shuttle/8);
-      shuttle.add(base_punta3);
-
-      var base_punta4_geometry = new THREE.BoxGeometry(larghezza_shuttle-30, altezza_shuttle/30, spessore_shuttle/4);
-      var base_punta4 = new THREE.Mesh(base_punta4_geometry, white_material);
-      base_punta4.position.set(0, altezza_shuttle/2 + altezza_shuttle/60, spessore_shuttle/2 + spessore_shuttle/4 + spessore_shuttle/8);
-      shuttle.add(base_punta4);
-
-      var base_punta5 = new THREE.Mesh(base_punta4_geometry, black_material);
-      base_punta5.position.set(0, altezza_shuttle/2 + altezza_shuttle/15 + altezza_shuttle/60, spessore_shuttle/8 * 3);
-      shuttle.add(base_punta5);
-
-      var base_punta6 = new THREE.Mesh(base_punta4_geometry, white_material);
-      base_punta6.position.set(0, altezza_shuttle/2 + altezza_shuttle/30 + altezza_shuttle/60, spessore_shuttle/4 + spessore_shuttle/8 * 3);
-      shuttle.add(base_punta6);
-
-      var n = 3;
-      var i = 0;
-      var y = altezza_shuttle/2 + altezza_shuttle/15 + altezza_shuttle/60;
-      var lato = larghezza_shuttle-20;
-      while (i < n){
-        var geometry = new THREE.BoxGeometry(lato, altezza_shuttle/30, spessore_shuttle/4);
-        var block_punta = new THREE.Mesh(geometry, white_material);
-        block_punta.position.set(0, y, spessore_shuttle/8);
-        y += altezza_shuttle/30;
-        lato -= 7;
-        shuttle.add(block_punta);
-        i++;
-      }*/
+                }
         
-      var y = altezza_shuttle/2 + altezza_shuttle/15 + altezza_shuttle/60;
-      var lato = larghezza_shuttle-20;
-      for (var i = 0; i < 3; i++) {
-        var geometry = new THREE.BoxGeometry(lato, altezza_shuttle/30, spessore_shuttle/4);
-        var block_punta = new THREE.Mesh(geometry, white_material);
-        block_punta.position.set(0, y, spessore_shuttle/8);
-        y += altezza_shuttle/30;
-        lato -= 7;
-        shuttle.add(block_punta);
-      }
+                //braccia della torre
 
-      i = 0;
-      n = 4;
-      y = altezza_shuttle/2 + altezza_shuttle/15 + altezza_shuttle/60;
-      lato = larghezza_shuttle-10;
-      while (i < n){
-        var geometry = new THREE.BoxGeometry(lato, altezza_shuttle/30, spessore_shuttle/4);
-        var block_punta = new THREE.Mesh(geometry, white_material);
-        block_punta.position.set(0, y, - spessore_shuttle/8);
-        y += altezza_shuttle/30;
-        lato -= 7;
-        shuttle.add(block_punta);
-        i++;
-      }
+                //braccio di mezzo
+                y = altezza_tower/5 *2 + altezza_tower/10 *2 + altezza_tower/20 *3;
+                x = larghezza_tower;
+                z = larghezza_tower/2 - altezza_tower/30;
+                var mid_arm_base_geometry = new THREE.BoxGeometry(larghezza_tower, altezza_tower/15, altezza_tower/15);
+                tower_mid_arm_base = new THREE.Mesh(mid_arm_base_geometry, tower_grey_material);
+                tower_mid_arm_base.position.set(x, y, z);
+                tower.add(tower_mid_arm_base);
 
-      i = 0;
-      n = 5;
-      y = altezza_shuttle/2 + altezza_shuttle/15 + altezza_shuttle/60;
-      lato = larghezza_shuttle;
-      while (i < n){
-        var geometry = new THREE.BoxGeometry(lato, altezza_shuttle/30, spessore_shuttle/4);
-        var block_punta = new THREE.Mesh(geometry, white_material);
-        var base_block_punta = new THREE.Mesh(geometry, black_material);
-        block_punta.position.set(0, y, - spessore_shuttle/8 *3);
-        base_block_punta.position.set(0, y, - spessore_shuttle/8 *5)
-        y += altezza_shuttle/30;
-        lato -= 7;
-        shuttle.add(block_punta);
-        shuttle.add(base_block_punta);
-        i++;
-      }
+                x += larghezza_tower;
 
-      //COSTRUZIONE ALI
+                var mid_arm_top_geometry = new THREE.BoxGeometry(larghezza_tower, altezza_tower/20, altezza_tower/20);
+                tower_mid_arm_top = new THREE.Mesh(mid_arm_top_geometry, tower_grey_material);
+                tower_mid_arm_top.position.set(x, y, z);
+                tower.add(tower_mid_arm_top);
 
-      //ALI LATERALI
-      var larghezza_ala = larghezza_shuttle;
-      y = altezza_shuttle/20;
-      i = altezza_shuttle/2 - (y/2);
-      var x = larghezza_shuttle/2 + larghezza_ala/2 + larghezza_ala/5;
-      var decr = larghezza_ala/(i/y);
-      while (i > 0) {
-        var ala_geometry = new THREE.BoxGeometry(larghezza_ala, y, spessore_shuttle/8);
-        var ala_white_dx = new THREE.Mesh(ala_geometry, white_material);
-        var ala_black_dx = new THREE.Mesh(ala_geometry, black_material);
-        ala_white_dx.position.set( x, -i, - spessore_shuttle/8 *4);
-        ala_black_dx.position.set( x, -i, - spessore_shuttle/8 *5);
-        shuttle.add(ala_white_dx);
-        shuttle.add(ala_black_dx);
+                //braccio in cima
+                y = altezza_tower/20 *5 + altezza_tower/5 *4 + altezza_tower/10 + altezza_tower/40;
+                x = (larghezza_tower * 2 + larghezza_tower/2)/2;
+                z = 0;
+                var top_arm_geometry = new THREE.BoxGeometry(larghezza_tower * 2 + larghezza_tower/2, altezza_tower/20, altezza_tower/20);
+                tower_top_arm1 = new THREE.Mesh(top_arm_geometry, tower_grey_material);
+                tower_top_arm1.position.set(x, y, z);
+                tower_top_arm.add(tower_top_arm1);
 
-        var ala_white_sx = new THREE.Mesh(ala_geometry, white_material);
-        var ala_black_sx = new THREE.Mesh(ala_geometry, black_material);
-        ala_white_sx.position.set( -x, -i, - spessore_shuttle/8 *4);
-        ala_black_sx.position.set( -x, -i, - spessore_shuttle/8 *5);
-        shuttle.add(ala_white_sx);
-        shuttle.add(ala_black_sx);
+                x = 0;
+                y = altezza_tower/20 *5 + altezza_tower/5 *4 + altezza_tower/10 + altezza_tower/40;
+                z = 0;
+                var alfa = 0;
+                n = 90;
+                var arm_connections_geometry = new THREE.BoxGeometry(altezza_tower/30, altezza_tower/20, altezza_tower/30);
+                while (alfa < n) {
+                    var tower_arm_connection = new THREE.Mesh(arm_connections_geometry, tower_grey_material);
+                    tower_arm_connection.position.set(x, y, z);
+                    tower_arm_connection.rotation.y = Math.PI * alfa / 180;
+                    tower_top_arm.add(tower_arm_connection);
 
-        larghezza_ala -= decr;
-        x -= decr/2;
-        i -= y;
-      }
+                    var shuttle_arm_connection = new THREE.Mesh(arm_connections_geometry, tower_grey_material);
+                    shuttle_arm_connection.position.set((larghezza_tower * 2 + larghezza_tower/2), (y - altezza_tower/40), z);
+                    shuttle_arm_connection.rotation.y = Math.PI * alfa / 180;
+                    tower_top_arm.add(shuttle_arm_connection);
 
-      var geometry_ala1 = new THREE.BoxGeometry(larghezza_shuttle/10, altezza_shuttle/3 *2, spessore_shuttle/8);
-      var white_ala1_dx = new THREE.Mesh(geometry_ala1, white_material);
-      var black_ala1_dx = new THREE.Mesh(geometry_ala1, black_material);
-      var white_ala1_sx = new THREE.Mesh(geometry_ala1, white_material);
-      var black_ala1_sx = new THREE.Mesh(geometry_ala1, black_material);
-      white_ala1_dx.position.set(x + larghezza_ala/2, -(altezza_shuttle/2 - altezza_shuttle/3), - spessore_shuttle/8 *4);
-      black_ala1_dx.position.set(x + larghezza_ala/2, -(altezza_shuttle/2 - altezza_shuttle/3), - spessore_shuttle/8 *5);
-      white_ala1_sx.position.set(-(x + larghezza_ala/2), -(altezza_shuttle/2 - altezza_shuttle/3), - spessore_shuttle/8 *4);
-      black_ala1_sx.position.set(-(x + larghezza_ala/2), -(altezza_shuttle/2 - altezza_shuttle/3), - spessore_shuttle/8 *5);
-      shuttle.add(white_ala1_dx);
-      shuttle.add(black_ala1_dx);
-      shuttle.add(white_ala1_sx);
-      shuttle.add(black_ala1_sx);
+                    alfa += 15;
+                }
+                tower.add(tower_top_arm);
 
-      var geometry_ala2 = new THREE.BoxGeometry(larghezza_shuttle/10, altezza_shuttle/4 * 3 + altezza_shuttle/8, spessore_shuttle/8);
-      var white_ala2_dx = new THREE.Mesh(geometry_ala2, white_material);
-      var black_ala2_dx = new THREE.Mesh(geometry_ala2, black_material);
-      var white_ala2_sx = new THREE.Mesh(geometry_ala2, white_material);
-      var black_ala2_sx = new THREE.Mesh(geometry_ala2, black_material);
-      white_ala2_dx.position.set(x - (larghezza_shuttle/10 - larghezza_ala/2), -(altezza_shuttle/2 - (altezza_shuttle/4 * 3 + altezza_shuttle/8) /2), - spessore_shuttle/8 *4);
-      black_ala2_dx.position.set(x - (larghezza_shuttle/10 - larghezza_ala/2), -(altezza_shuttle/2 - (altezza_shuttle/4 * 3 + altezza_shuttle/8) /2), - spessore_shuttle/8 *5);
-      white_ala2_sx.position.set(-(x - (larghezza_shuttle/10 - larghezza_ala/2)), -(altezza_shuttle/2 - (altezza_shuttle/4 * 3 + altezza_shuttle/8) /2), - spessore_shuttle/8 *4);
-      black_ala2_sx.position.set(-(x - (larghezza_shuttle/10 - larghezza_ala/2)), -(altezza_shuttle/2 - (altezza_shuttle/4 * 3 + altezza_shuttle/8) /2), - spessore_shuttle/8 *5);
-      shuttle.add(white_ala2_dx);
-      shuttle.add(black_ala2_dx);
-      shuttle.add(white_ala2_sx);
-      shuttle.add(black_ala2_sx);
-
-      //ALA DORSALE
-      n = 5;
-      i = 0;
-      larghezza_ala = altezza_shuttle/4;
-      lato = altezza_shuttle/20;
-      y = altezza_shuttle/5 * 2;
-      var z = spessore_shuttle/2 + spessore_shuttle/4 + spessore_shuttle/4 + lato/2;
-      while (i < n) {
-      var ala_front_white_geometry = new THREE.BoxGeometry(lato, larghezza_ala, lato);
-      var ala_front_white = new THREE.Mesh(ala_front_white_geometry, white_material);
-
-      var ala_front_black_geometry = new THREE.BoxGeometry(lato, lato + lato/4, lato);
-      var ala_front_black = new THREE.Mesh(ala_front_black_geometry, black_material);
-
-      ala_front_white.position.set(0, -y, z);
-      ala_front_black.position.set(0, -((y - larghezza_ala/2) - (lato/2 + lato/8)), z);
-      shuttle.add(ala_front_white);
-      shuttle.add(ala_front_black);
-      larghezza_ala -= lato/2;
-      y += lato;
-      z += lato;
-      i ++;
-      }
-
-      //COSTRUZIONE PROPULSORI
-
-      alfa = 0;
-      var h = 3;
-      n = 90;
-      while (alfa < n) {
-        i = 0;
-        larghezza_propulsori_temp = larghezza_shuttle/3;
-        altezza_propulsori_temp = altezza_shuttle/30;
-        spessore_propulsori_temp = larghezza_shuttle/3;
-        y = altezza_shuttle/2 + altezza_propulsori_temp * h - altezza_propulsori_temp/2;
-        while (i < h) {
-          var propulsori_geometry = new THREE.BoxGeometry(larghezza_propulsori_temp, altezza_propulsori_temp, spessore_propulsori_temp);
-
-          var mesh_propulsori1 = new THREE.Mesh(propulsori_geometry, grey_material);
-          mesh_propulsori1.position.set(- larghezza_shuttle/3, -y, - spessore_shuttle/4);
-          mesh_propulsori1.rotation.y = Math.PI * alfa / 180;
-          shuttle.add(mesh_propulsori1);
-
-          var mesh_propulsori2 = new THREE.Mesh(propulsori_geometry, grey_material);
-          mesh_propulsori2.position.set(+ larghezza_shuttle/3, -y, - spessore_shuttle/4);
-          mesh_propulsori2.rotation.y = Math.PI * alfa / 180;
-          shuttle.add(mesh_propulsori2);
-
-          var mesh_propulsori3 = new THREE.Mesh(propulsori_geometry, grey_material);
-          mesh_propulsori3.position.set(0, -y, + larghezza_shuttle/4);
-          mesh_propulsori3.rotation.y = Math.PI * alfa / 180;
-          shuttle.add(mesh_propulsori3);
-
-          larghezza_propulsori_temp -= larghezza_shuttle/20;
-          spessore_propulsori_temp -= larghezza_shuttle/20;
-          y -= altezza_propulsori_temp;
-          i ++;
-        }
-        alfa += 15;
-      }
-    }
-
-    function External_tank() {
-      //COSTRUZIONE SERBATOIO
-      var larghezza_tank = larghezza_shuttle;
-      var altezza_tank = altezza_shuttle*1.3; //1.5 risulta troppo alto
-      var spessore_tank = spessore_shuttle;
-
-      var orange_material = new THREE.MeshBasicMaterial({ color: 0xff8100, wireframe: false });
-
-      var tank_base_geometry = new THREE.BoxGeometry(larghezza_tank, altezza_tank, spessore_tank);
-
-
-      var n = 180;
-      var alfa = 0;
-      while (alfa < n) {
-        var external_tank_base = new THREE.Mesh(tank_base_geometry, orange_material);
-        external_tank_base.position.set(0, -altezza_shuttle/3 + 3*altezza_shuttle/5, 0);  //altezza_shuttle/3 alternativa valida per y   y= mesh_propulsori1.position.y + altezza_tank/2
-        external_tank_base.rotation.y = Math.PI * alfa / 180;
-        external_tank.add(external_tank_base);
-        alfa += 15;
-      }
-
-      n = 180;
-      alfa = 0;
-      var h = 6;
-      while (alfa < n) {
-        i = 0;
-        larghezza_tank_temp = larghezza_tank;
-        altezza_tank_temp = altezza_tank/10;
-        spessore_tank_temp = spessore_tank;
-        y = external_tank_base.position.y + altezza_tank/2 + altezza_tank_temp/2;
-        while (i < h) {
-          var tank_punta_geometry = new THREE.BoxGeometry(larghezza_tank_temp, altezza_tank_temp, spessore_tank_temp);
-
-          var external_tank_punta = new THREE.Mesh(tank_punta_geometry, orange_material);
-          external_tank_punta.position.set(0, y, external_tank_base.position.z);
-          external_tank_punta.rotation.y = Math.PI * alfa / 180;
-          external_tank.add(external_tank_punta);
-          larghezza_tank_temp -= larghezza_tank/5;
-          spessore_tank_temp -= spessore_tank/5;
-          altezza_tank_temp -= altezza_tank_temp/5;
-          y += altezza_tank_temp;
-          i ++;
-        }
-        alfa += 15;
-      }
-      external_tank.position.set(external_tank.position.x, external_tank.position.y, -spessore_shuttle*2);
-    }
-
-    function Razzo(razzo, pos) {
-      var white_material = new THREE.MeshBasicMaterial({ color: 0xfcfcfc, wireframe: false });
-
-      var larghezza_razzo = larghezza_shuttle/2;
-      var altezza_razzo = altezza_shuttle*1.4;
-      var spessore_razzo = spessore_shuttle;
-
-      var razzo_base_geometry = new THREE.BoxGeometry(larghezza_razzo, altezza_razzo, spessore_razzo);
-
-      var n = 90;
-      var alfa = 0;
-
-      while (alfa < n) {
-        var razzo_base = new THREE.Mesh(razzo_base_geometry, white_material);
-        razzo_base.position.set(0, 0, 0);
-        razzo_base.rotation.y = Math.PI * alfa / 180;
-        razzo.add(razzo_base);
-
-        alfa += 15;
-      }
-
-      alfa = 0;
-      var h = 6;
-      while (alfa < n) {
-        var i = 0;
-        larghezza_razzo_temp = larghezza_razzo;
-        altezza_razzo_temp = altezza_razzo/20;
-        spessore_razzo_temp = spessore_razzo;
-        y = razzo_base.position.y + altezza_razzo/2 + altezza_razzo_temp/2;
-        while (i < h) {
-          var razzo_punta_geometry = new THREE.BoxGeometry(larghezza_razzo_temp, altezza_razzo_temp, spessore_razzo_temp);
-
-          var razzo_punta = new THREE.Mesh(razzo_punta_geometry, white_material);
-          razzo_punta.position.set(razzo_base.position.x, y, razzo_base.position.z);
-          razzo_punta.rotation.y = Math.PI * alfa / 180;
-          razzo.add(razzo_punta);
-
-          larghezza_razzo_temp -= larghezza_razzo/5;
-          spessore_razzo_temp -= spessore_razzo/5;
-          altezza_razzo_temp -= altezza_razzo_temp/5;
-          y += altezza_razzo_temp;
-          i ++;
-        }
-        alfa += 15;
-      }
-
-      alfa = 0;
-      var h = 3;
-      while (alfa < n) {
-      i = 0;
-      var d = 0;
-      larghezza_razzo_temp = larghezza_razzo;
-      spessore_razzo_temp = spessore_razzo;
-      altezza_razzo_temp = altezza_razzo/50;
-      y = razzo_base.position.y - altezza_razzo/2 - altezza_razzo_temp/2 - altezza_razzo_temp*(h - 1)*2;
-      while (d < 2) {
-        while (i < h) {
-          var razzo_propulsori_geometry = new THREE.BoxGeometry(larghezza_razzo_temp, altezza_razzo_temp, spessore_razzo_temp);
-
-          var razzo_propulsori = new THREE.Mesh(razzo_propulsori_geometry, white_material);
-          razzo_propulsori.position.set(razzo_base.position.x, y, razzo_base.position.z);
-          razzo_propulsori.rotation.y = Math.PI * alfa / 180;
-          razzo.add(razzo_propulsori);
-
-          larghezza_razzo_temp -= larghezza_razzo/10;
-          spessore_razzo_temp -= spessore_razzo/10;
-          y += altezza_razzo_temp;
-          i ++;
-        }
-        i = 0;
-        y = razzo_base.position.y - altezza_razzo/2 - altezza_razzo_temp/2 - altezza_razzo_temp*(h - 1);
-        larghezza_razzo_temp = larghezza_razzo;
-        spessore_razzo_temp = spessore_razzo;
-        altezza_razzo_temp = altezza_razzo/50;
-        d ++;
-      }
-      alfa += 15;
-    }
-    if (pos == 0) {
-      razzo.position.set(larghezza_shuttle/2 + larghezza_shuttle/2, razzo.position.y + altezza_shuttle/15, -spessore_shuttle*2);
-    } else {
-      razzo.position.set(-(larghezza_shuttle/2 + larghezza_shuttle/2), razzo.position.y + altezza_shuttle/15, -spessore_shuttle*2);
-    }
-  }
+                //costruzione della punta della torre
+                var d = 3;
+                i = 0;
+                var raggio = altezza_tower/30;
+                var altezza = altezza_tower/5;
+                y = altezza_tower/20 *5 + altezza_tower/5 *4 + altezza_tower/10 + altezza_tower/20 + altezza_tower/20;
+                while (i < d) {
+                    var tower_punta_geometry = new THREE.BoxGeometry(raggio, altezza, raggio);
+                    alfa = 0;
+                    while (alfa < n) {
+                        var tower_punta = new THREE.Mesh(tower_punta_geometry, tower_grey_material);
+                        tower_punta.position.set(x, y, z);
+                        tower_punta.rotation.y = Math.PI * alfa / 180;
+                        tower.add(tower_punta);
+                        alfa += 15;
+                    }
+                    raggio -= altezza_tower/60;
+                    altezza -= altezza_tower/30;
+                    y += altezza;
+                    i ++;
+                }
+            }
       
-  function Arm_detouchment() {
-/*        var currentTime = Date.now();
+            function Shuttle() {
+                var white_material = new THREE.MeshBasicMaterial({ color: 0xfcfcfc, wireframe: false });
+                var black_material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: false });
+                var grey_material = new THREE.MeshBasicMaterial({ color: 0x222222, wireframe: false });
+
+                //costruzione del corpo dello shuttle
+                var base_geometry = new THREE.BoxGeometry(larghezza_shuttle, altezza_shuttle, spessore_shuttle);
+                var base_shuttle = new THREE.Mesh(base_geometry, white_material);
+                shuttle.add(base_shuttle);
+
+                var base_geometry2 = new THREE.BoxGeometry(larghezza_shuttle-10, altezza_shuttle, spessore_shuttle/4);
+                var base_shuttle2 = new THREE.Mesh(base_geometry2, white_material);
+                base_shuttle2.position.set(0, 0, spessore_shuttle/2 + spessore_shuttle/8);
+                shuttle.add(base_shuttle2);
+
+                var base_geometry3 = new THREE.BoxGeometry(larghezza_shuttle-20, altezza_shuttle, spessore_shuttle/4);
+                var base_shuttle3 = new THREE.Mesh(base_geometry3, white_material);
+                base_shuttle3.position.set(0, 0, spessore_shuttle/2 + spessore_shuttle/4 + spessore_shuttle/8);
+                shuttle.add(base_shuttle3);
+
+                //costruzione della punta dello shuttle
+                var base_punta_geometry = new THREE.BoxGeometry(larghezza_shuttle, altezza_shuttle/15, spessore_shuttle/4 * 3);
+                var base_punta_shuttle = new THREE.Mesh(base_punta_geometry, white_material);
+                base_punta_shuttle.position.set(0, altezza_shuttle/2 + altezza_shuttle/30, -spessore_shuttle/8);
+                shuttle.add(base_punta_shuttle);
+
+                var black_punta_geometry = new THREE.BoxGeometry(larghezza_shuttle, altezza_shuttle + altezza_shuttle/15, spessore_shuttle/4);
+                var black_punta_shuttle = new THREE.Mesh(black_punta_geometry, black_material);
+                black_punta_shuttle.position.set(0, altezza_shuttle/30, - spessore_shuttle/8 *5);
+                shuttle.add(black_punta_shuttle);
+
+                var base_punta2_geometry = new THREE.BoxGeometry(larghezza_shuttle-20, altezza_shuttle/30, spessore_shuttle/4);
+                var base_punta2 = new THREE.Mesh(base_punta2_geometry, white_material);
+                base_punta2.position.set(0, altezza_shuttle/2 + altezza_shuttle/60, spessore_shuttle/2 + spessore_shuttle/8);
+                shuttle.add(base_punta2);
+
+                var base_punta3_geometry = new THREE.BoxGeometry(larghezza_shuttle-20, altezza_shuttle/15, spessore_shuttle/4);
+                var base_punta3 = new THREE.Mesh(base_punta3_geometry, black_material);
+                base_punta3.position.set(0, altezza_shuttle/2 + altezza_shuttle/30, spessore_shuttle/2 - spessore_shuttle/8);
+                shuttle.add(base_punta3);
+
+                var base_punta4_geometry = new THREE.BoxGeometry(larghezza_shuttle-30, altezza_shuttle/30, spessore_shuttle/4);
+                var base_punta4 = new THREE.Mesh(base_punta4_geometry, white_material);
+                base_punta4.position.set(0, altezza_shuttle/2 + altezza_shuttle/60, spessore_shuttle/2 + spessore_shuttle/4 + spessore_shuttle/8);
+                shuttle.add(base_punta4);
+
+                var base_punta5 = new THREE.Mesh(base_punta4_geometry, black_material);
+                base_punta5.position.set(0, altezza_shuttle/2 + altezza_shuttle/15 + altezza_shuttle/60, spessore_shuttle/8 * 3);
+                shuttle.add(base_punta5);
+
+                var base_punta6 = new THREE.Mesh(base_punta4_geometry, white_material);
+                base_punta6.position.set(0, altezza_shuttle/2 + altezza_shuttle/30 + altezza_shuttle/60, spessore_shuttle/4 + spessore_shuttle/8 * 3);
+                shuttle.add(base_punta6);
+
+                var n = 3;
+                var i = 0;
+                var y = altezza_shuttle/2 + altezza_shuttle/15 + altezza_shuttle/60;
+                var lato = larghezza_shuttle-20;
+                while (i < n){
+                    var geometry = new THREE.BoxGeometry(lato, altezza_shuttle/30, spessore_shuttle/4);
+                    var block_punta = new THREE.Mesh(geometry, white_material);
+                    block_punta.position.set(0, y, spessore_shuttle/8);
+                    y += altezza_shuttle/30;
+                    lato -= 7;
+                    shuttle.add(block_punta);
+                    i++;
+                }
+        
+                var y = altezza_shuttle/2 + altezza_shuttle/15 + altezza_shuttle/60;
+                var lato = larghezza_shuttle-20;
+                for (var i = 0; i < 3; i++) {
+                    var geometry = new THREE.BoxGeometry(lato, altezza_shuttle/30, spessore_shuttle/4);
+                    var block_punta = new THREE.Mesh(geometry, white_material);
+                    block_punta.position.set(0, y, spessore_shuttle/8);
+                    y += altezza_shuttle/30;
+                    lato -= 7;
+                    shuttle.add(block_punta);
+                }
+
+                i = 0;
+                n = 4;
+                y = altezza_shuttle/2 + altezza_shuttle/15 + altezza_shuttle/60;
+                lato = larghezza_shuttle-10;
+                while (i < n){
+                    var geometry = new THREE.BoxGeometry(lato, altezza_shuttle/30, spessore_shuttle/4);
+                    var block_punta = new THREE.Mesh(geometry, white_material);
+                    block_punta.position.set(0, y, - spessore_shuttle/8);
+                    y += altezza_shuttle/30;
+                    lato -= 7;
+                    shuttle.add(block_punta);
+                    i++;
+                }
+
+                i = 0;
+                n = 5;
+                y = altezza_shuttle/2 + altezza_shuttle/15 + altezza_shuttle/60;
+                lato = larghezza_shuttle;
+                while (i < n){
+                    var geometry = new THREE.BoxGeometry(lato, altezza_shuttle/30, spessore_shuttle/4);
+                    var block_punta = new THREE.Mesh(geometry, white_material);
+                    var base_block_punta = new THREE.Mesh(geometry, black_material);
+                    block_punta.position.set(0, y, - spessore_shuttle/8 *3);
+                    base_block_punta.position.set(0, y, - spessore_shuttle/8 *5)
+                    y += altezza_shuttle/30;
+                    lato -= 7;
+                    shuttle.add(block_punta);
+                    shuttle.add(base_block_punta);
+                    i++;
+                }
+
+                //costruzione delle ali
+
+                //ali laterali
+                var larghezza_ala = larghezza_shuttle;
+                y = altezza_shuttle/20;
+                i = altezza_shuttle/2 - (y/2);
+                var x = larghezza_shuttle/2 + larghezza_ala/2 + larghezza_ala/5;
+                var decr = larghezza_ala/(i/y);
+                while (i > 0) {
+                    var ala_geometry = new THREE.BoxGeometry(larghezza_ala, y, spessore_shuttle/8);
+                    var ala_white_dx = new THREE.Mesh(ala_geometry, white_material);
+                    var ala_black_dx = new THREE.Mesh(ala_geometry, black_material);
+                    ala_white_dx.position.set( x, -i, - spessore_shuttle/8 *4);
+                    ala_black_dx.position.set( x, -i, - spessore_shuttle/8 *5);
+                    shuttle.add(ala_white_dx);
+                    shuttle.add(ala_black_dx);
+
+                    var ala_white_sx = new THREE.Mesh(ala_geometry, white_material);
+                    var ala_black_sx = new THREE.Mesh(ala_geometry, black_material);
+                    ala_white_sx.position.set( -x, -i, - spessore_shuttle/8 *4);
+                    ala_black_sx.position.set( -x, -i, - spessore_shuttle/8 *5);
+                    shuttle.add(ala_white_sx);
+                    shuttle.add(ala_black_sx);
+
+                    larghezza_ala -= decr;
+                    x -= decr/2;
+                    i -= y;
+                }
+
+                var geometry_ala1 = new THREE.BoxGeometry(larghezza_shuttle/10, altezza_shuttle/3 *2, spessore_shuttle/8);
+                var white_ala1_dx = new THREE.Mesh(geometry_ala1, white_material);
+                var black_ala1_dx = new THREE.Mesh(geometry_ala1, black_material);
+                var white_ala1_sx = new THREE.Mesh(geometry_ala1, white_material);
+                var black_ala1_sx = new THREE.Mesh(geometry_ala1, black_material);
+                white_ala1_dx.position.set(x + larghezza_ala/2, -(altezza_shuttle/2 - altezza_shuttle/3), - spessore_shuttle/8 *4);
+                black_ala1_dx.position.set(x + larghezza_ala/2, -(altezza_shuttle/2 - altezza_shuttle/3), - spessore_shuttle/8 *5);
+                white_ala1_sx.position.set(-(x + larghezza_ala/2), -(altezza_shuttle/2 - altezza_shuttle/3), - spessore_shuttle/8 *4);
+                black_ala1_sx.position.set(-(x + larghezza_ala/2), -(altezza_shuttle/2 - altezza_shuttle/3), - spessore_shuttle/8 *5);
+                shuttle.add(white_ala1_dx);
+                shuttle.add(black_ala1_dx);
+                shuttle.add(white_ala1_sx);
+                shuttle.add(black_ala1_sx);
+
+                var geometry_ala2 = new THREE.BoxGeometry(larghezza_shuttle/10, altezza_shuttle/4 * 3 + altezza_shuttle/8, spessore_shuttle/8);
+                var white_ala2_dx = new THREE.Mesh(geometry_ala2, white_material);
+                var black_ala2_dx = new THREE.Mesh(geometry_ala2, black_material);
+                var white_ala2_sx = new THREE.Mesh(geometry_ala2, white_material);
+                var black_ala2_sx = new THREE.Mesh(geometry_ala2, black_material);
+                white_ala2_dx.position.set(x - (larghezza_shuttle/10 - larghezza_ala/2), -(altezza_shuttle/2 - (altezza_shuttle/4 * 3 + altezza_shuttle/8) /2), - spessore_shuttle/8 *4);
+                black_ala2_dx.position.set(x - (larghezza_shuttle/10 - larghezza_ala/2), -(altezza_shuttle/2 - (altezza_shuttle/4 * 3 + altezza_shuttle/8) /2), - spessore_shuttle/8 *5);
+                white_ala2_sx.position.set(-(x - (larghezza_shuttle/10 - larghezza_ala/2)), -(altezza_shuttle/2 - (altezza_shuttle/4 * 3 + altezza_shuttle/8) /2), - spessore_shuttle/8 *4);
+                black_ala2_sx.position.set(-(x - (larghezza_shuttle/10 - larghezza_ala/2)), -(altezza_shuttle/2 - (altezza_shuttle/4 * 3 + altezza_shuttle/8) /2), - spessore_shuttle/8 *5);
+                shuttle.add(white_ala2_dx);
+                shuttle.add(black_ala2_dx);
+                shuttle.add(white_ala2_sx);
+                shuttle.add(black_ala2_sx);
+                
+                //ala dorsale
+                n = 5;
+                i = 0;
+                larghezza_ala = altezza_shuttle/4;
+                lato = altezza_shuttle/20;
+                y = altezza_shuttle/5 * 2;
+                var z = spessore_shuttle/2 + spessore_shuttle/4 + spessore_shuttle/4 + lato/2;
+                while (i < n) {
+                    var ala_front_white_geometry = new THREE.BoxGeometry(lato, larghezza_ala, lato);
+                    var ala_front_white = new THREE.Mesh(ala_front_white_geometry, white_material);
+
+                    var ala_front_black_geometry = new THREE.BoxGeometry(lato, lato + lato/4, lato);
+                    var ala_front_black = new THREE.Mesh(ala_front_black_geometry, black_material);
+
+                    ala_front_white.position.set(0, -y, z);
+                    ala_front_black.position.set(0, -((y - larghezza_ala/2) - (lato/2 + lato/8)), z);
+                    shuttle.add(ala_front_white);
+                    shuttle.add(ala_front_black);
+                    larghezza_ala -= lato/2;
+                    y += lato;
+                    z += lato;
+                    i ++;
+                }
+
+                //costruzione dei propulsori
+                alfa = 0;
+                var h = 3;
+                n = 90;
+                while (alfa < n) {
+                    i = 0;
+                    larghezza_propulsori_temp = larghezza_shuttle/3;
+                    altezza_propulsori_temp = altezza_shuttle/30;
+                    spessore_propulsori_temp = larghezza_shuttle/3;
+                    y = altezza_shuttle/2 + altezza_propulsori_temp * h - altezza_propulsori_temp/2;
+                    while (i < h) {
+                        var propulsori_geometry = new THREE.BoxGeometry(larghezza_propulsori_temp, altezza_propulsori_temp, spessore_propulsori_temp);
+
+                        var mesh_propulsori1 = new THREE.Mesh(propulsori_geometry, grey_material);
+                        mesh_propulsori1.position.set(- larghezza_shuttle/3, -y, - spessore_shuttle/4);
+                        mesh_propulsori1.rotation.y = Math.PI * alfa / 180;
+                        shuttle.add(mesh_propulsori1);
+
+                        var mesh_propulsori2 = new THREE.Mesh(propulsori_geometry, grey_material);
+                        mesh_propulsori2.position.set(+ larghezza_shuttle/3, -y, - spessore_shuttle/4);
+                        mesh_propulsori2.rotation.y = Math.PI * alfa / 180;
+                        shuttle.add(mesh_propulsori2);
+
+                        var mesh_propulsori3 = new THREE.Mesh(propulsori_geometry, grey_material);
+                        mesh_propulsori3.position.set(0, -y, + larghezza_shuttle/4);
+                        mesh_propulsori3.rotation.y = Math.PI * alfa / 180;
+                        shuttle.add(mesh_propulsori3);
+
+                        larghezza_propulsori_temp -= larghezza_shuttle/20;
+                        spessore_propulsori_temp -= larghezza_shuttle/20;
+                        y -= altezza_propulsori_temp;
+                        i ++;
+                    }
+                    alfa += 15;
+                }
+            }
+
+            function External_tank() { //costruzione del serbatoio    
+                var larghezza_tank = larghezza_shuttle;
+                var altezza_tank = altezza_shuttle*1.3; //1.5 risulta troppo alto
+                var spessore_tank = spessore_shuttle;
+
+                var orange_material = new THREE.MeshBasicMaterial({ color: 0xff8100, wireframe: false });
+
+                var tank_base_geometry = new THREE.BoxGeometry(larghezza_tank, altezza_tank, spessore_tank);
+
+                var n = 180;
+                var alfa = 0;
+                while (alfa < n) {
+                    var external_tank_base = new THREE.Mesh(tank_base_geometry, orange_material);
+                    external_tank_base.position.set(0, -altezza_shuttle/3 + 3*altezza_shuttle/5, 0);  //altezza_shuttle/3 alternativa valida per y   y= mesh_propulsori1.position.y + altezza_tank/2
+                    external_tank_base.rotation.y = Math.PI * alfa / 180;
+                    external_tank.add(external_tank_base);
+                    alfa += 15;
+                }
+
+                n = 180;
+                alfa = 0;
+                var h = 6;
+                while (alfa < n) {
+                    i = 0;
+                    larghezza_tank_temp = larghezza_tank;
+                    altezza_tank_temp = altezza_tank/10;
+                    spessore_tank_temp = spessore_tank;
+                    y = external_tank_base.position.y + altezza_tank/2 + altezza_tank_temp/2;
+                    while (i < h) {
+                        var tank_punta_geometry = new THREE.BoxGeometry(larghezza_tank_temp, altezza_tank_temp, spessore_tank_temp);
+
+                        var external_tank_punta = new THREE.Mesh(tank_punta_geometry, orange_material);
+                        external_tank_punta.position.set(0, y, external_tank_base.position.z);
+                        external_tank_punta.rotation.y = Math.PI * alfa / 180;
+                        external_tank.add(external_tank_punta);
+                        larghezza_tank_temp -= larghezza_tank/5;
+                        spessore_tank_temp -= spessore_tank/5;
+                        altezza_tank_temp -= altezza_tank_temp/5;
+                        y += altezza_tank_temp;
+                        i ++;
+                    }
+                    alfa += 15;
+                }
+                external_tank.position.set(external_tank.position.x, external_tank.position.y, -spessore_shuttle*2);
+            }
+
+            function Razzo(razzo, pos) {
+                var white_material = new THREE.MeshBasicMaterial({ color: 0xfcfcfc, wireframe: false });
+
+                var larghezza_razzo = larghezza_shuttle/2;
+                var altezza_razzo = altezza_shuttle*1.4;
+                var spessore_razzo = spessore_shuttle;
+
+                var razzo_base_geometry = new THREE.BoxGeometry(larghezza_razzo, altezza_razzo, spessore_razzo);
+                
+                var n = 90;
+                var alfa = 0;
+
+                while (alfa < n) {
+                    var razzo_base = new THREE.Mesh(razzo_base_geometry, white_material);
+                    razzo_base.position.set(0, 0, 0);
+                    razzo_base.rotation.y = Math.PI * alfa / 180;
+                    razzo.add(razzo_base);
+
+                    alfa += 15;
+                }
+
+                alfa = 0;
+                var h = 6;
+                while (alfa < n) {
+                    var i = 0;
+                    larghezza_razzo_temp = larghezza_razzo;
+                    altezza_razzo_temp = altezza_razzo/20;
+                    spessore_razzo_temp = spessore_razzo;
+                    y = razzo_base.position.y + altezza_razzo/2 + altezza_razzo_temp/2;
+                    while (i < h) {
+                        var razzo_punta_geometry = new THREE.BoxGeometry(larghezza_razzo_temp, altezza_razzo_temp, spessore_razzo_temp);
+
+                        var razzo_punta = new THREE.Mesh(razzo_punta_geometry, white_material);
+                        razzo_punta.position.set(razzo_base.position.x, y, razzo_base.position.z);
+                        razzo_punta.rotation.y = Math.PI * alfa / 180;
+                        razzo.add(razzo_punta);
+
+                        larghezza_razzo_temp -= larghezza_razzo/5;
+                        spessore_razzo_temp -= spessore_razzo/5;
+                        altezza_razzo_temp -= altezza_razzo_temp/5;
+                        y += altezza_razzo_temp;
+                        i ++;
+                    }
+                    alfa += 15;
+                }
+
+                alfa = 0;
+                var h = 3;
+                while (alfa < n) {
+                    i = 0;
+                    var d = 0;
+                    larghezza_razzo_temp = larghezza_razzo;
+                    spessore_razzo_temp = spessore_razzo;
+                    altezza_razzo_temp = altezza_razzo/50;
+                    y = razzo_base.position.y - altezza_razzo/2 - altezza_razzo_temp/2 - altezza_razzo_temp*(h - 1)*2;
+                    while (d < 2) {
+                        while (i < h) {
+                            var razzo_propulsori_geometry = new THREE.BoxGeometry(larghezza_razzo_temp, altezza_razzo_temp, spessore_razzo_temp);
+
+                            var razzo_propulsori = new THREE.Mesh(razzo_propulsori_geometry, white_material);
+                            razzo_propulsori.position.set(razzo_base.position.x, y, razzo_base.position.z);
+                            razzo_propulsori.rotation.y = Math.PI * alfa / 180;
+                            razzo.add(razzo_propulsori);
+
+                            larghezza_razzo_temp -= larghezza_razzo/10;
+                            spessore_razzo_temp -= spessore_razzo/10;
+                            y += altezza_razzo_temp;
+                            i ++;
+                        }
+                        i = 0;
+                        y = razzo_base.position.y - altezza_razzo/2 - altezza_razzo_temp/2 - altezza_razzo_temp*(h - 1);
+                        larghezza_razzo_temp = larghezza_razzo;
+                        spessore_razzo_temp = spessore_razzo;
+                        altezza_razzo_temp = altezza_razzo/50;
+                        d ++;
+                    }
+                    alfa += 15;
+                }
+                
+                if (pos == 0) {
+                    razzo.position.set(larghezza_shuttle/2 + larghezza_shuttle/2, razzo.position.y + altezza_shuttle/15, -spessore_shuttle*2);
+                } else {
+                    razzo.position.set(-(larghezza_shuttle/2 + larghezza_shuttle/2), razzo.position.y + altezza_shuttle/15, -spessore_shuttle*2);
+                }
+            }
+      
+            function Arm_detouchment() {
+                /*        var currentTime = Date.now();
         if (currentTime - time < durataAnimazione) {
           tower_top_arm.rotation.y -= Math.PI * 0.1 /180;
           tower_mid_arm_top.position.x -= 0.05;
         }*/
-        if (angolo <= 90) {
-          tower_top_arm.rotation.y -= Math.PI * 0.1 / 180;
-          tower_mid_arm_top.position.x -= 0.05;
-        }
-        angolo += 0.1;
-      }
+                if (angolo <= 90) {
+                    tower_top_arm.rotation.y -= Math.PI * 0.1 / 180;
+                    tower_mid_arm_top.position.x -= 0.05;
+                }
+                angolo += 0.1;
+            }
 
-  function Update() {
-    requestAnimationFrame(Update);
-    controls.update();
-    stats.update();
+            function Update() {
+                requestAnimationFrame(Update);
+                controls.update();
+                stats.update();
 
-    Render();
-  }
+                Render();
+            }
 
-  function Render() {
-    renderer.render(scene, camera);
-    Arm_detouchment();
-    //Launch();
-    //Flames_animation();
-  }
+            function Render() {
+                renderer.render(scene, camera);
+                Arm_detouchment();
+                //Launch();
+                //Flames_animation();
+            }
 
-
-  Start();
-  Update();
-
-  </script>
-</body>
+            Start();
+            Update();
+        </script>
+    </body>
 </html>
