@@ -50,3 +50,20 @@
     * impostazione delle misure della piattaforma indipendentemente dalle dimensioni dello space shuttle e della torre di lancio;
     * dichiarazione e istanziazione delle variabili launch_base, base_material, base_column_geometry, base_column1, base_column2, base_column3, base_column4, base_plain_geometry, base_plain.
 * Posizionamento della piattaforma di lancio dello space shuttle in modo che si trovi al di sotto di esso e attaccato ad esso.
+* Definizione della funzione Animation():
+    * controllo dello stato dello space shuttle (fermo o in movimento);
+    * definizione della funzione Arm_detachment();
+    * definizione della funzione Launch();
+    * dichiarazione e istanziazione delle variabili time e durataAnimazione.
+    
+## 06-04-2018
+* Cambiamento dei piani near e far della camera per ridurre lo z-figthing.
+* Ri-dichiarazione di alcune variabili come variabili globali.
+* Spostamento della camera.
+* Allungamento del tempo di durata dell'animazione.
+* Definizione della funzione Smoke_creation():
+    * dichiarazione e istanziazione delle variabili smoke_geometry, smoke_material, smoke, smoke_column.
+* Definizione della funzione Smoke_animation():
+    * dichiarazione e istanziazione delle variabili posx, posy, posz, soglia.
+* Posizionamento del fumo di lancio in modo che parta dai propulsori e si estenda fino a terra inizialmente, per poi mantenere un'altezza fissa una volta raggiunta una certa quota.
+* Integrazione delle varie componenti dello space shuttle e delle strutture di lancio in un unico file.
