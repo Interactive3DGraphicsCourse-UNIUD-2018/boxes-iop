@@ -43,6 +43,11 @@
             //variabili per il fumo
             var smoke_column;
 
+            //variabili per le fiamme
+            var flames_propulsore1, flames_propulsore2, flames_propulsore3, flames_razzo_dx, flames_razzo_sx;
+            //var flames;
+            var flames1, flames2, flames3, flames4, flames5;
+
             function Start() { //chiamo le funzioni di costruzione del paesaggio e dello space shuttle
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000);
@@ -53,7 +58,7 @@
                 document.body.appendChild(renderer.domElement);
 
                 camera.position.set(150,200,300);
-                camera.lookAt( new THREE.Vector3(0,0,0));
+                camera.lookAt(new THREE.Vector3(0,0,0));
 
                 //dimensioni del blocco centrale, su cui vengono proporzionate tutte le altre componenti
                 larghezza_shuttle = 30;
@@ -75,9 +80,15 @@
                 propulsore2 = new THREE.Object3D();
                 propulsore3 = new THREE.Object3D();
                 Shuttle(); //costruisce lo shuttle comprensivo di ali e propulsori sottostanti
-                Flames_creation(larghezza_shuttle/3, propulsore1);
-                Flames_creation(larghezza_shuttle/3, propulsore2);
-                Flames_creation(larghezza_shuttle/3, propulsore3);
+                flames_propulsore1 = new THREE.Object3D();
+                flames1 = new Array();
+                Flames_creation(larghezza_shuttle/3, flames1);
+                flames_propulsore2 = new THREE.Object3D();
+                flames2 = new Array();
+                Flames_creation(larghezza_shuttle/3, flames2);
+                flames_propulsore3 = new THREE.Object3D();
+                flames3 = new Array();
+                Flames_creation(larghezza_shuttle/3, flames3);
 
                 external_tank = new THREE.Object3D();
                 External_tank(); //costruisce il serbatoio centrale
@@ -88,20 +99,21 @@
                 razzo_dx = new THREE.Object3D();
                 Razzo(razzo_dx, pos);
                 shuttle.add(razzo_dx);
-                Flames_creation(larghezza_razzo, razzo_dx)
+                flames_razzo_dx = new THREE.Object3D();
+                flames4 = new Array();
+                Flames_creation(larghezza_shuttle/2, flames4);
 
 
                 pos = 1;
                 razzo_sx = new THREE.Object3D();
                 Razzo(razzo_sx, pos);
                 shuttle.add(razzo_sx);
-
+                flames_razzo_sx = new THREE.Object3D();
+                flames5 = new Array();
+                Flames_creation(larghezza_shuttle/2, flames5);
 
                 smoke_column = new THREE.Object3D();
                 Smoke_creation(larghezza_shuttle*2);
-
-                flames_group = new THREE.Object3D();
-                Flames_creation();
 
                 shuttle.position.set(-(larghezza_tower/3), altezza_shuttle*1.4, 0);
 
@@ -143,11 +155,10 @@
                 //controlli orbitali
                 controls = new THREE.OrbitControls(camera);
                 controls.addEventListener('change', Render);
-
             }
 
-            function Flames_creation(dim, pivot) {
-                var flames_geometry = new THREE.BoxGeometry(1,1,1);
+            function Flames_creation(dim, flames) {
+                var flames_geometry = new THREE.BoxGeometry(2,2,2);
                 var flames_materials = new Array();
                 flames_materials[0] = new THREE.MeshBasicMaterial({ color:  0xfe0002 });
                 flames_materials[1] = new THREE.MeshBasicMaterial({ color:  0xfb7d07 });
@@ -155,7 +166,6 @@
                 flames_materials[3] = new THREE.MeshBasicMaterial({ color:  0xf3dc77 });
                 flames_materials[4] = new THREE.MeshBasicMaterial({ color:  0xf5edaa });
 
-                flames = new Array();
                 for (var i = 0; i < 200; i++) {
                   flames[i] = new THREE.Mesh(flames_geometry, flames_materials[Math.trunc(Math.random()*(flames_materials.length))]);
 
@@ -170,21 +180,21 @@
                 }
             }
 
-            function Flames_animation(dim, pivot) {
+            function Flames_animation(dim, pivot_reference, pivot, flames, height) {
                 var d = 0;
                 while (d < flames.length) {
                     var h = d;
                     while (h < d+3) {
-                        flames_group.add(flames[h]);
+                        pivot.add(flames[h]);
                         h ++;
                     }
-                    for (var i = 0; i < flames_group.children.length; i++) {
-                        var posx = flames_group.children[i].position.x;
-                        var posy = flames_group.children[i].position.y;
-                        var posz = flames_group.children[i].position.z;
-                        posy -= 0.05;
+                    for (var i = 0; i < pivot.children.length; i++) {
+                        var posx = pivot.children[i].position.x;
+                        var posy = pivot.children[i].position.y;
+                        var posz = pivot.children[i].position.z;
+                        posy -= 0.5;
 
-                        if (posy <= flames_group.position.y - 40 + 3*(Math.abs(posx) + Math.abs(posz))) {
+                        if (posy <= shuttle.position.y - altezza_shuttle/2 + 3*(Math.abs(posx) + Math.abs(posz))) {
                             var x = Math.random()* dim - dim/2;
                             var z = Math.random()* dim - dim/2;
 
@@ -193,15 +203,15 @@
                                 var z = Math.random()* dim - dim/2;
                             }
 
-                            flames_group.children[i].position.set(x, (pivot.position.y - 50) , z);
+                            pivot.children[i].position.set(x, shuttle.position.y, z);
                         } else {
-                            flames_group.children[i].position.y = posy;
+                            pivot.children[i].position.y = posy;
                         }
                     }
                     d += 3;
                 }
-                flames_group.position.set(pivot.position.x, 0, pivot.position.z);
-                scene.add(flames_group);
+                pivot.position.set((pivot_reference.position.x -(larghezza_tower/3)), - height, pivot_reference.position.z);
+                scene.add(pivot);
             }
 
             function Smoke_creation(dim) {
@@ -236,10 +246,10 @@
                         var posz = smoke_column.children[i].position.z;
                         posy -= 0.5;
                         var soglia;
-                        if (shuttle.position.y <= 300) {
+                        if (shuttle.position.y <= 200) {
                             soglia = 0;
                         } else {
-                            soglia = shuttle.position.y - 300;
+                            soglia = shuttle.position.y - 200;
                         }
                         if (posy <= soglia) {
                           var x = Math.random()* dim - dim/2;
@@ -256,7 +266,7 @@
                     }
                     d += 3;
                 }
-                smoke_column.position.set(shuttle.position.x, 0, shuttle.position.z);
+                smoke_column.position.set(shuttle.position.x, 0, shuttle.position.z - spessore_shuttle/2);
                 scene.add(smoke_column);
             }
 
@@ -296,6 +306,7 @@
             function Tower() {
 
                 var tower_grey_material = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: false });
+                var tower_dark_grey_material = new THREE.MeshBasicMaterial({ color: 0x333333, wireframe: false });
 
                 //torre
                 var tower_base_geometry = new THREE.BoxGeometry(larghezza_tower, altezza_tower/20, spessore_tower);
@@ -330,7 +341,7 @@
 
                     y += altezza_tower/10 + altezza_tower/40;
 
-                    var tower_base = new THREE.Mesh(tower_base_geometry, tower_grey_material);
+                    var tower_base = new THREE.Mesh(tower_base_geometry, tower_dark_grey_material);
                     tower_base.position.set(0, y, 0);
                     tower.add(tower_base);
 
@@ -362,7 +373,7 @@
                 x = (larghezza_tower * 2 + larghezza_tower/2)/2;
                 z = 0;
                 var top_arm_geometry = new THREE.BoxGeometry(larghezza_tower * 2 + larghezza_tower/2, altezza_tower/20, altezza_tower/20);
-                tower_top_arm1 = new THREE.Mesh(top_arm_geometry, tower_grey_material);
+                tower_top_arm1 = new THREE.Mesh(top_arm_geometry, tower_dark_grey_material);
                 tower_top_arm1.position.set(x, y, z);
                 tower_top_arm.add(tower_top_arm1);
 
@@ -790,7 +801,11 @@
                 var currentTime = Date.now();
                 if (currentTime - time < durataAnimazione) {
                     shuttle.position.y += 0.5;
-                    Flames_animation();
+                    Flames_animation(larghezza_shuttle/3, propulsore1, flames_propulsore1, flames1, 60);
+                    Flames_animation(larghezza_shuttle/3, propulsore2, flames_propulsore2, flames2, 60);
+                    Flames_animation(larghezza_shuttle/3, propulsore3, flames_propulsore3, flames3, 60);
+                    Flames_animation(larghezza_shuttle/2, razzo_dx, flames_razzo_dx, flames4, 80);
+                    Flames_animation(larghezza_shuttle/2, razzo_sx, flames_razzo_sx, flames5, 80);
                     Smoke_animation(larghezza_shuttle*2);
                 }
             }
