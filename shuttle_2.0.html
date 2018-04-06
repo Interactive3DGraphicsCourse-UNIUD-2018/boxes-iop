@@ -75,6 +75,9 @@
                 propulsore2 = new THREE.Object3D();
                 propulsore3 = new THREE.Object3D();
                 Shuttle(); //costruisce lo shuttle comprensivo di ali e propulsori sottostanti
+                Flames_creation(larghezza_shuttle/3, propulsore1);
+                Flames_creation(larghezza_shuttle/3, propulsore2);
+                Flames_creation(larghezza_shuttle/3, propulsore3);
 
                 external_tank = new THREE.Object3D();
                 External_tank(); //costruisce il serbatoio centrale
@@ -85,11 +88,14 @@
                 razzo_dx = new THREE.Object3D();
                 Razzo(razzo_dx, pos);
                 shuttle.add(razzo_dx);
+                Flames_creation(larghezza_razzo, razzo_dx)
+
 
                 pos = 1;
                 razzo_sx = new THREE.Object3D();
                 Razzo(razzo_sx, pos);
                 shuttle.add(razzo_sx);
+
 
                 smoke_column = new THREE.Object3D();
                 Smoke_creation(larghezza_shuttle*2);
@@ -187,7 +193,7 @@
                                 var z = Math.random()* dim - dim/2;
                             }
 
-                            flames_group.children[i].position.set(x, (pivot.position.y - (Height(pivot))) , z);
+                            flames_group.children[i].position.set(x, (pivot.position.y - 50) , z);
                         } else {
                             flames_group.children[i].position.y = posy;
                         }
@@ -771,7 +777,7 @@
                 }
             }
 
-            function Arm_detouchment() {
+            function Arm_detachment() {
                 if (angolo <= 90) {
                     tower_top_arm.rotation.y -= Math.PI * 0.1 / 180;
                     tower_mid_arm_top.position.x -= 0.05;
@@ -791,7 +797,7 @@
 
             function Animation() {
               if (angolo <= 90) {
-                  Arm_detouchment();
+                  Arm_detachment();
               } else {
                   Launch();
               }
