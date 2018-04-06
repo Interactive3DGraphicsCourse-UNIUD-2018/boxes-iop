@@ -42,18 +42,20 @@
 
       camera.position.set(75,100,150);
       camera.lookAt( new THREE.Vector3(0,0,0));
-
+        
+      //dimensioni del blocco centrale, su cui vengono proporzionate tutte le altre compoinenti
       larghezza_shuttle = 30;
       altezza_shuttle = 100;
       spessore_shuttle = 15;
 
       shuttle = new THREE.Object3D();
-      Shuttle();
+      Shuttle(); //costruisce lo shuttle comprensivo di ali e propulsori sottostanti
 
       external_tank = new THREE.Object3D();
-      External_tank();
+      External_tank(); //costruisce il serbatoio centrale
       shuttle.add(external_tank);
 
+      //costruzione dei razzi destro e sinistro, pos serve a distinguerli al momento di posizionarli nella funzione Razzo()
       var pos = 0;
       razzo_dx = new THREE.Object3D();
       Razzo(razzo_dx, pos);
@@ -106,6 +108,7 @@
       base_shuttle3.position.set(0, 0, spessore_shuttle/2 + spessore_shuttle/4 + spessore_shuttle/8);
       shuttle.add(base_shuttle3);
 
+      //costruzione della punta dello shuttle
       var base_punta_geometry = new THREE.BoxGeometry(larghezza_shuttle, altezza_shuttle/15, spessore_shuttle/4 * 3);
       var base_punta_shuttle = new THREE.Mesh(base_punta_geometry, white_material);
       base_punta_shuttle.position.set(0, altezza_shuttle/2 + altezza_shuttle/30, -spessore_shuttle/8);
@@ -142,7 +145,7 @@
       var n = 3;
       var i = 0;
       var y = altezza_shuttle/2 + altezza_shuttle/15 + altezza_shuttle/60;
-      lato = larghezza_shuttle-20;
+      var lato = larghezza_shuttle-20;
       while (i < n){
         var geometry = new THREE.BoxGeometry(lato, altezza_shuttle/30, spessore_shuttle/4);
         var block_punta = new THREE.Mesh(geometry, white_material);
@@ -151,6 +154,17 @@
         lato -= 7;
         shuttle.add(block_punta);
         i++;
+      }*/
+        
+      var y = altezza_shuttle/2 + altezza_shuttle/15 + altezza_shuttle/60;
+      var lato = larghezza_shuttle-20;
+      for (var i = 0; i < 3; i++) {
+        var geometry = new THREE.BoxGeometry(lato, altezza_shuttle/30, spessore_shuttle/4);
+        var block_punta = new THREE.Mesh(geometry, white_material);
+        block_punta.position.set(0, y, spessore_shuttle/8);
+        y += altezza_shuttle/30;
+        lato -= 7;
+        shuttle.add(block_punta);
       }
 
       i = 0;
@@ -191,7 +205,7 @@
       y = altezza_shuttle/20;
       i = altezza_shuttle/2 - (y/2);
       var x = larghezza_shuttle/2 + larghezza_ala/2 + larghezza_ala/5;
-      var decr = larghezza_ala / (i / y);
+      var decr = larghezza_ala/(i/y);
       while (i > 0) {
         var ala_geometry = new THREE.BoxGeometry(larghezza_ala, y, spessore_shuttle/8);
         var ala_white_dx = new THREE.Mesh(ala_geometry, white_material);
