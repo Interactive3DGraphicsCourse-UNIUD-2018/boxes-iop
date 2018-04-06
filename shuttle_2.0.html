@@ -29,6 +29,10 @@
     var scene, camera, renderer, controls, stats;
     var shuttle, external_tank, razzo_dx, razzo_sx;
     var larghezza_shuttle, altezza_shuttle, spessore_shuttle;
+      
+    //VARIABILI PER LA TORRE
+    var tower, tower_arm_base, tower_arm_top;
+    var durataAnimazione, time, angolo;
 
     function Start() {
       // chiamo le funzioni di costruzione del paesaggio e dello space shuttle
@@ -69,7 +73,19 @@
 //      flames_group = new THREE.Object3D();
 
       scene.add(shuttle);
-
+        
+      //AGGIUNTA DELLA TORRE
+      tower = new THREE.Object3D();
+      tower_mid_arm_base = new THREE.Object3D();
+      tower_mid_arm_top = new THREE.Object3D();
+      tower_top_arm = new THREE.Object3D();
+      Tower();
+      tower.add(tower_mid_arm_base);
+      tower.add(tower_mid_arm_top);
+      tower.add(tower_top_arm);
+      scene.add(tower);
+      angolo = 0;
+        
       time = Date.now();
       durataAnimazione = 14000;
 
@@ -88,6 +104,167 @@
 
     }
 
+    function Tower() {
+        var altezza_tower = 200;
+        var larghezza_tower = 50;
+        var spessore_tower = 50;
+
+        var tower_grey_material = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: true });
+
+        //TORRE
+
+        var tower_base_geometry = new THREE.BoxGeometry(larghezza_tower, altezza_tower/20, spessore_tower);
+        var tower_column_geometry = new THREE.BoxGeometry(larghezza_tower/10, altezza_tower/5, spessore_tower/10);
+        var tower_base_column_geometry = new THREE.BoxGeometry(larghezza_tower/2, altezza_tower/5, spessore_tower/2);
+
+        /*var a = 0;
+        var n = 5;
+        var i = 0;
+        var y = 0;
+        var x = larghezza_tower/2 - larghezza_tower/20;
+        var z = larghezza_tower/2 - larghezza_tower/20;
+        while(i < n){
+          if (a == 1) {
+            var tower_base = new THREE.Mesh(tower_base_geometry, tower_grey_material);
+            tower_base.position.set(0, y, 0);
+            tower.add(tower_base);
+            a = 0;
+            y += altezza_tower/40 + altezza_tower/10;
+            i ++;
+          } else {
+            var tower_column1 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+            tower_column1.position.set(-x, y, -z);
+            tower.add(tower_column1);
+
+            var tower_column2 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+            tower_column2.position.set(x, y, -z);
+            tower.add(tower_column2);
+
+            var tower_column3 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+            tower_column3.position.set(x, y, z);
+            tower.add(tower_column3);
+
+            var tower_column4 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+            tower_column4.position.set(-x, y, z);
+            tower.add(tower_column4);
+
+            var tower_base_column = new THREE.Mesh(tower_base_column_geometry, tower_grey_material);
+            tower_base_column.position.set(0, y, 0);
+            tower.add(tower_base_column);
+
+            a = 1;
+            y += altezza_tower/10 + altezza_tower/40;
+          }
+        }*/
+        var n = 5;
+        var i = 0;
+        var y = 0;
+        var x = larghezza_tower/2 - larghezza_tower/20;
+        var z = larghezza_tower/2 - larghezza_tower/20;
+        while(i < n){
+          var tower_column1 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+          tower_column1.position.set(-x, y, -z);
+          tower.add(tower_column1);
+
+          var tower_column2 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+          tower_column2.position.set(x, y, -z);
+          tower.add(tower_column2);
+
+          var tower_column3 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+          tower_column3.position.set(x, y, z);
+          tower.add(tower_column3);
+
+          var tower_column4 = new THREE.Mesh(tower_column_geometry, tower_grey_material);
+          tower_column4.position.set(-x, y, z);
+          tower.add(tower_column4);
+
+          var tower_base_column = new THREE.Mesh(tower_base_column_geometry, tower_grey_material);
+          tower_base_column.position.set(0, y, 0);
+          tower.add(tower_base_column);
+
+          y += altezza_tower/10 + altezza_tower/40;
+
+          var tower_base = new THREE.Mesh(tower_base_geometry, tower_grey_material);
+          tower_base.position.set(0, y, 0);
+          tower.add(tower_base);
+
+          y += altezza_tower/10 + altezza_tower/40;
+          i ++;
+
+        }
+        
+        //BRACCIA DELLA TORRE
+
+        //BRACCIO DI MEZZO
+        y = altezza_tower/5 *2 + altezza_tower/10 *2 + altezza_tower/20 *3;
+        x = larghezza_tower;
+        z = larghezza_tower/2 - altezza_tower/30;
+        var mid_arm_base_geometry = new THREE.BoxGeometry(larghezza_tower, altezza_tower/15, altezza_tower/15);
+        tower_mid_arm_base = new THREE.Mesh(mid_arm_base_geometry, tower_grey_material);
+        tower_mid_arm_base.position.set(x, y, z);
+        tower.add(tower_mid_arm_base);
+
+        x += larghezza_tower;
+
+        var mid_arm_top_geometry = new THREE.BoxGeometry(larghezza_tower, altezza_tower/20, altezza_tower/20);
+        tower_mid_arm_top = new THREE.Mesh(mid_arm_top_geometry, tower_grey_material);
+        tower_mid_arm_top.position.set(x, y, z);
+        tower.add(tower_mid_arm_top);
+
+        //BRACCIO IN CIMA
+        y = altezza_tower/20 *5 + altezza_tower/5 *4 + altezza_tower/10 + altezza_tower/40;
+        x = (larghezza_tower * 2 + larghezza_tower/2)/2;
+        z = 0;
+        var top_arm_geometry = new THREE.BoxGeometry(larghezza_tower * 2 + larghezza_tower/2, altezza_tower/20, altezza_tower/20);
+        tower_top_arm1 = new THREE.Mesh(top_arm_geometry, tower_grey_material);
+        tower_top_arm1.position.set(x, y, z);
+        tower_top_arm.add(tower_top_arm1);
+
+        x = 0;
+        y = altezza_tower/20 *5 + altezza_tower/5 *4 + altezza_tower/10 + altezza_tower/40;
+        z = 0;
+        var alfa = 0;
+        n = 90;
+        var arm_connections_geometry = new THREE.BoxGeometry(altezza_tower/30, altezza_tower/20, altezza_tower/30);
+        while (alfa < n) {
+          var tower_arm_connection = new THREE.Mesh(arm_connections_geometry, tower_grey_material);
+          tower_arm_connection.position.set(x, y, z);
+          tower_arm_connection.rotation.y = Math.PI * alfa / 180;
+          tower_top_arm.add(tower_arm_connection);
+
+          var shuttle_arm_connection = new THREE.Mesh(arm_connections_geometry, tower_grey_material);
+          shuttle_arm_connection.position.set((larghezza_tower * 2 + larghezza_tower/2), (y - altezza_tower/40), z);
+          shuttle_arm_connection.rotation.y = Math.PI * alfa / 180;
+          tower_top_arm.add(shuttle_arm_connection);
+
+          alfa += 15;
+        }
+        tower.add(tower_top_arm);
+
+        //COSTRUZIONE PUNTA DELLA TORRE
+        var d = 3;
+        i = 0;
+        var raggio = altezza_tower/30;
+        var altezza = altezza_tower/5;
+        y = altezza_tower/20 *5 + altezza_tower/5 *4 + altezza_tower/10 + altezza_tower/20 + altezza_tower/20;
+        while (i < d) {
+          var tower_punta_geometry = new THREE.BoxGeometry(raggio, altezza, raggio);
+          alfa = 0;
+          while (alfa < n) {
+            var tower_punta = new THREE.Mesh(tower_punta_geometry, tower_grey_material);
+            tower_punta.position.set(x, y, z);
+            tower_punta.rotation.y = Math.PI * alfa / 180;
+            tower.add(tower_punta);
+            alfa += 15;
+          }
+          raggio -= altezza_tower/60;
+          altezza -= altezza_tower/30;
+          y += altezza;
+          i ++;
+
+        }
+      }
+      
     function Shuttle() {
       var white_material = new THREE.MeshBasicMaterial({ color: 0xfcfcfc, wireframe: false });
       var black_material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: false });
@@ -449,6 +626,19 @@
       razzo.position.set(-(larghezza_shuttle/2 + larghezza_shuttle/2), razzo.position.y + altezza_shuttle/15, -spessore_shuttle*2);
     }
   }
+      
+  function Arm_detouchment() {
+/*        var currentTime = Date.now();
+        if (currentTime - time < durataAnimazione) {
+          tower_top_arm.rotation.y -= Math.PI * 0.1 /180;
+          tower_mid_arm_top.position.x -= 0.05;
+        }*/
+        if (angolo <= 90) {
+          tower_top_arm.rotation.y -= Math.PI * 0.1 / 180;
+          tower_mid_arm_top.position.x -= 0.05;
+        }
+        angolo += 0.1;
+      }
 
   function Update() {
     requestAnimationFrame(Update);
@@ -460,6 +650,7 @@
 
   function Render() {
     renderer.render(scene, camera);
+    Arm_detouchment();
     //Launch();
     //Flames_animation();
   }
