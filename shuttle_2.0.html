@@ -130,6 +130,42 @@
 
             }
 
+            function Flames_creation(dimx, dimy, dimz, pivot) {
+                var flames_geometry = new THREE.BoxGeometry(1,1,1);
+                var flames_materials = new Array();
+                flames_materials[0] = new THREE.MeshBasicMaterial({ color:  0xfe0002 });
+                flames_materials[1] = new THREE.MeshBasicMaterial({ color:  0xfb7d07 });
+                flames_materials[2] = new THREE.MeshBasicMaterial({ color:  0xec6627 });
+                flames_materials[3] = new THREE.MeshBasicMaterial({ color:  0xf3dc77 });
+                flames_materials[4] = new THREE.MeshBasicMaterial({ color:  0xf5edaa });
+
+                flames = new Array();
+                for (var i = 0; i < 200; i++) {
+                  flames[i] = new THREE.Mesh(flames_geometry, flames_materials[Math.trunc(Math.random()*(flames_materials.length))]);
+
+                  var x = Math.random()* dimx - dimx/2;
+                  var z = Math.random()* dimz - dimz/2;
+
+                  while (x*x + z*z > Math.pow((dimx/2), 2)) {
+                      var x = Math.random()* dimx - dimx/2;
+                      var z = Math.random()* dimz - dimz/2;
+                  }
+                  flames[i].position.set(x, 0, z);
+                }
+            }
+
+            function Flames_animation() {
+
+            }
+
+            function Smoke_creation() {
+
+            }
+
+            function Smoke_animation() {
+              
+            }
+
             function Launch_base() {
 
 	    	        var base_material = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: false });
