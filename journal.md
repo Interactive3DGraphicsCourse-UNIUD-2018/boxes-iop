@@ -67,3 +67,8 @@
     * dichiarazione e istanziazione delle variabili posx, posy, posz, soglia.
 * Posizionamento del fumo di lancio in modo che parta dai propulsori e si estenda fino a terra inizialmente, per poi mantenere un'altezza fissa una volta raggiunta una certa quota.
 * Integrazione delle varie componenti dello space shuttle e delle strutture di lancio in un unico file.
+* Definizione della funzione Flames_creation():
+    * dichiarazione e istanziazione delle variabili flames_geometry, flames_materials, flames.
+* Definizione della funzione Flames_animation:
+    * dichiarazione e istanziazione delle variabili pivot_reference, pivot;
+    * chiamata al metodo in Launch() tramite le variabili flames_propulsore1, flames_propulsore2, flames_propulsore3, flames_razzo_dx,flames_razzo_sx, flames1, flames2, flames3, flames4, flames5.

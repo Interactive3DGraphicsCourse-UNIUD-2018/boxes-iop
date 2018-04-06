@@ -1,4 +1,4 @@
-# Logging di progetto - Turus Davide, Iop Alessandro
+# Report di progetto - Turus Davide, Iop Alessandro
 ## Parte 1: idee
 La prima idea era stata di realizzare un'ambientazione ricollegabile al Signore Degli Anelli, in particolare le fortezze di Minas Tirith o di Barad-Dur, con particolare cura nei dettagli architettonici. L'animazione sarebbe stata il movimento delle mura che crollano nel primo caso e il movimento dell'occhio di Sauron assieme all'apertura dei cancelli neri nel secondo. Tuttavia, per motivi di tempo e originalità della stessa, l'idea è stata subito scartata.
 La scelta è stata quindi di optare per la costruzione di un ambiente rappresentante la base di lancio di uno space shuttle. Per l'animazione si è optato di rappresentare il lancio dello stesso, con effetti di fiamme e fumo alla base, nonché transizione del cielo (con camera che segue lo shuttle) per simulare la ripresa di un lancio spaziale.
