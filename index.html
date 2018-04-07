@@ -25,7 +25,10 @@
     </head>
     <body>
         <script>
+            /*  DEFINIZIONE DI TUTTE LE VARIABILI   */
+
             var scene, camera, renderer, controls, stats;
+
             //variabili per lo shuttle
             var shuttle, external_tank, razzo_dx, razzo_sx, propulsore1, propulsore2, propulsore3;
             var larghezza_shuttle, altezza_shuttle, spessore_shuttle;
@@ -46,10 +49,44 @@
 
             //variabili per le fiamme
             var flames_propulsore1, flames_propulsore2, flames_propulsore3, flames_razzo_dx, flames_razzo_sx;
-            //var flames;
             var flames1, flames2, flames3, flames4, flames5;
 
             var environment;
+
+            
+            /* FUNZIONI */
+            
+            //return array with height data from img, taken from: http://danni-three.blogspot.it/2013/09/threejs-heightmaps.html
+		    function getHeightData(img,scale) {
+  
+                if (scale == undefined) scale=1;
+
+                var canvas = document.createElement( 'canvas' );
+                canvas.width = img.width;
+                canvas.height = img.height;
+                var context = canvas.getContext( '2d' );
+
+                var size = img.width * img.height;
+                console.log(size);
+                var data = new Float32Array( size );
+
+                context.drawImage(img,0,0);
+
+                for ( var i = 0; i < size; i ++ ) {
+                data[i] = 0
+                }
+
+                var imgd = context.getImageData(0, 0, img.width, img.height);
+                var pix = imgd.data;
+
+                var j=0;
+                for (var i = 0; i<pix.length; i +=4) {
+                var all = pix[i]+pix[i+1]+pix[i+2];  // all is in range 0 - 255*3
+                data[j++] = scale*all/3;   
+                }
+
+                return data;
+            }
 
             function Start() { //chiamo le funzioni di costruzione del paesaggio e dello space shuttle
                 scene = new THREE.Scene();
@@ -60,7 +97,9 @@
                 renderer.setClearColor(0x3333aa);
                 document.body.appendChild(renderer.domElement);
 
-                //dimensioni del blocco centrale, su cui vengono proporzionate tutte le altre componenti
+                /*  DEFINIZIONE MISURE DI BASE  */
+
+                //dimensioni del blocco centrale dello shuttle, su cui vengono proporzionate tutte le altre componenti
                 larghezza_shuttle = 30;
                 altezza_shuttle = 100;
                 spessore_shuttle = 15;
@@ -75,13 +114,18 @@
                 altezza_base = 50;
                 spessore_base = 200;
 
+                /*  CREAZIONE DEGLI OGGETTI */
+
                 environment = new THREE.Object3D();
 
+                //creazione dello shuttle e dei pivot interni ad esso
                 shuttle = new THREE.Object3D();
                 propulsore1 = new THREE.Object3D();
                 propulsore2 = new THREE.Object3D();
                 propulsore3 = new THREE.Object3D();
-                Shuttle(); //costruisce lo shuttle comprensivo di ali e propulsori sottostanti
+                Shuttle();
+
+                //creazione delle fiamme dei propulsori
                 flames_propulsore1 = new THREE.Object3D();
                 flames1 = new Array();
                 Flames_creation(larghezza_shuttle/3, flames1);
@@ -92,15 +136,18 @@
                 flames3 = new Array();
                 Flames_creation(larghezza_shuttle/3, flames3);
 
+                //creazione del serbatoio esterno
                 external_tank = new THREE.Object3D();
                 External_tank(); //costruisce il serbatoio centrale
                 shuttle.add(external_tank);
 
-                //costruzione dei razzi destro e sinistro, pos serve a distinguerli al momento di posizionarli nella funzione Razzo()
+                //creazione dei razzi destro e sinistro, pos serve a distinguerli al momento di posizionarli nella funzione Razzo()
                 var pos = 0;
                 razzo_dx = new THREE.Object3D();
                 Razzo(razzo_dx, pos);
                 shuttle.add(razzo_dx);
+
+                //creazione delle fiamme del razzo dx
                 flames_razzo_dx = new THREE.Object3D();
                 flames4 = new Array();
                 Flames_creation(larghezza_shuttle/2, flames4);
@@ -110,18 +157,20 @@
                 razzo_sx = new THREE.Object3D();
                 Razzo(razzo_sx, pos);
                 shuttle.add(razzo_sx);
+
+                //creazione delle fiamme del razzo sx
                 flames_razzo_sx = new THREE.Object3D();
                 flames5 = new Array();
                 Flames_creation(larghezza_shuttle/2, flames5);
 
+                //creazione della colonna di fumo
                 smoke_column = new THREE.Object3D();
                 Smoke_creation(larghezza_shuttle*3);
 
+                //posizionamento dello shuttle nella scena
                 shuttle.position.set(-(larghezza_tower/3), altezza_shuttle*1.4, 0);
 
-                //scene.add(shuttle);
-
-                //aggiunta della torre
+                //creazione della torre
                 tower = new THREE.Object3D();
                 tower_mid_arm_base = new THREE.Object3D();
                 tower_mid_arm_top = new THREE.Object3D();
@@ -131,21 +180,25 @@
                 tower.add(tower_mid_arm_top);
                 tower.add(tower_top_arm);
 
+                //posizionamento della torre nella scena
                 tower.position.set(-(larghezza_base/2 + larghezza_tower), altezza_tower/10, 0);
-                //scene.add(tower);
+
+                //inizializzazione delle variabili necessarie per l'animazione della torre
                 angolo = 0;
                 angolo_return = 0;
 
-                //aggiunta della base di lancio
+                //creazione della base di lancio
                 launch_base = new THREE.Object3D();
                 Launch_base();
 
+                //posizionamento della base di lancio nella scena
                 launch_base.position.set(0, altezza_base/2, 0);
-                //scene.add(launch_base);
 
-                durataAnimazione = 40000;
+                //inizializzazione delle variabili necessarie per l'animazione dello shuttle
+                durataAnimazione = 10000;
                 riposizionato = false;
 
+                //aggiunta degli oggetti al pivot esterno e successiva aggiunta di questo alla scena
                 environment.add(shuttle);
                 environment.add(tower);
                 environment.add(launch_base);
@@ -161,11 +214,13 @@
                 controls = new THREE.OrbitControls(camera);
                 controls.addEventListener('change', Render);
                 
+                //posizionamento e controllo della camera
                 camera.position.set(100,200,250);
                 controls.target = shuttle.position;
                 controls.autoRotateSpeed = 4;
             }
 
+            //funzione di creazione delle fiamme
             function Flames_creation(dim, flames) {
                 var flames_geometry = new THREE.BoxGeometry(2,2,2);
                 var flames_materials = new Array();
@@ -189,6 +244,7 @@
                 }
             }
 
+            //funzione di animazione delle fiamme
             function Flames_animation(dim, pivot_reference, pivot, flames, height) {
                 var d = 0;
                 while (d < flames.length) {
@@ -223,9 +279,10 @@
                 scene.add(pivot);
             }
 
+            //funzione di creazione della colonna di fumo
             function Smoke_creation(dim) {
-                var smoke_geometry = new THREE.BoxGeometry(4,4,4);
-                var smoke_material = new THREE.MeshBasicMaterial({ color: 0xcccccc });
+                var smoke_geometry = new THREE.BoxGeometry(4,8,4);
+                var smoke_material = new THREE.MeshBasicMaterial({ color: 0xcccccc, transparency: true, opacity: 0.4 });
                 smoke = new Array();
                 for (var i = 0; i < 1000; i++) {
                     smoke[i] = new THREE.Mesh(smoke_geometry, smoke_material);
@@ -241,6 +298,7 @@
                 }
             }
 
+            //funzione di animazione della colonna di fumo
             function Smoke_animation(dim) {
                 var d = 0;
                 while (d < smoke.length) {
@@ -253,7 +311,7 @@
                         var posx = smoke_column.children[i].position.x;
                         var posy = smoke_column.children[i].position.y;
                         var posz = smoke_column.children[i].position.z;
-                        posy -= 0.5;
+                        posy -= 1;
                         var soglia;
                         if (shuttle.position.y <= 250) {
                             soglia = 0;
@@ -279,6 +337,7 @@
                 scene.add(smoke_column);
             }
 
+            //funzione di creazione della base di lancio
             function Launch_base() {
 
 	    	    var base_material = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: false });
@@ -312,6 +371,7 @@
 	    	    launch_base.add(base_plain);
             }
 
+            //funzione di creazione della torre
             function Tower() {
 
                 var tower_grey_material = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: false });
@@ -430,6 +490,7 @@
                 }
             }
 
+            //funzione di creazione dello shuttle comprensivo di ali e propulsori sottostanti
             function Shuttle() {
                 var white_material = new THREE.MeshBasicMaterial({ color: 0xfcfcfc, wireframe: false });
                 var black_material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: false });
@@ -665,7 +726,8 @@
                 shuttle.add(propulsore3);
             }
 
-            function External_tank() { //costruzione del serbatoio
+            //funzione di creazione del serbatoio
+            function External_tank() {
                 var larghezza_tank = larghezza_shuttle;
                 var altezza_tank = altezza_shuttle*1.3; //1.5 risulta troppo alto
                 var spessore_tank = spessore_shuttle;
@@ -711,6 +773,7 @@
                 external_tank.position.set(external_tank.position.x, external_tank.position.y, -spessore_shuttle*2);
             }
 
+            //funzione di creazione di un razzo, dx o sx è definito da pos
             function Razzo(razzo, pos) {
                 var white_material = new THREE.MeshBasicMaterial({ color: 0xfcfcfc, wireframe: false });
 
@@ -797,6 +860,7 @@
                 }
             }
 
+            //funzione di animazione delle braccia della torre
             function Arm_detachment() {
                 if (angolo <= 90) {
                     tower_top_arm.rotation.y -= Math.PI * 0.1 / 180;
@@ -807,6 +871,7 @@
                 time = Date.now();
             }
 
+            //funzione di animazione dello shuttle
             function Launch() {
                 var currentTime = Date.now();
                 if (currentTime - time < durataAnimazione) {
@@ -833,6 +898,13 @@
                 	flames_razzo_dx.visible = false;
                 	flames_razzo_sx.visible = false;
                 	smoke_column.visible = false;
+                    Flames_animation(larghezza_shuttle/3, propulsore1, flames_propulsore1, flames1, 60);
+                    Flames_animation(larghezza_shuttle/3, propulsore2, flames_propulsore2, flames2, 60);
+                    Flames_animation(larghezza_shuttle/3, propulsore3, flames_propulsore3, flames3, 60);
+                    Flames_animation(larghezza_shuttle/2, razzo_dx, flames_razzo_dx, flames4, 80);
+                    Flames_animation(larghezza_shuttle/2, razzo_sx, flames_razzo_sx, flames5, 80);
+                    smoke_column.position.y = 0;
+
 
                 	controls.autoRotate = false;
                 	Reposition();
@@ -840,6 +912,7 @@
                 }
             }
 
+            //funzione di riposizionamneto dello shuttle
             function Reposition() {
             	if (riposizionato == true) {
             		if (shuttle.position.y >= altezza_shuttle*1.4) {
@@ -858,9 +931,11 @@
             	} else {
             		shuttle.position.y = -(altezza_shuttle*1.4);
             		riposizionato = true;
+                    camera.position.y = 200;
             	}
             }
 
+            //funzione di gestione globale dell'animazione
             function Animation() {
               	if (angolo <= 90) {
                 	Arm_detachment();
