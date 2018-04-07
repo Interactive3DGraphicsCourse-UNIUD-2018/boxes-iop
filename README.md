@@ -31,3 +31,7 @@ Vengono presentati di seguito alcuni screenshot del lavoro in fase di sviluppo e
 |![Shuttle launch gif](media/shuttle.gif)|
 |*--*|
 |*Simulazione del lancio dello space shuttle, fase di testing.*|
+
+|![Shuttle reppsitioning gif](media/shuttle2.gif)|
+|*--*|
+|*Simulazione del riposizionamenti dello space shuttle, una volta che si è esaurita l'animazione.*|
