@@ -16,15 +16,20 @@ Come è possibile attestare, l'intero codice è contenuto in un unico file compl
 ## Parte 5: risultati
 Vengono presentati di seguito alcuni screenshot del lavoro in fase di sviluppo e a lavoro finito, accompagnato da alcune gif integrative.
 
-|![Shuttle building](media/screen2.png)|
+<p align="center>
+|![Shuttle building](media/screen0.png)|
 |:--:|
 |*Costruzione dello space shuttle.*|
 
-![Shuttle positioning](media/screen2.png)
-Posizionamento dello space shuttle a veicolo fermo sulla piattaforma di lancio.
+|![Shuttle positioning](media/screen2.png)|
+|*--*|
+|*Posizionamento dello space shuttle a veicolo fermo sulla piattaforma di lancio.*|
 
-![Shuttle animation positioning](media/screen3.png)
-Regolazione della posizione e dell'estensione degli effetti di fiamme e fumo in modalità wireframe.
+|![Shuttle animation positioning](media/screen3.png)|
+|*--*|
+|*Regolazione della posizione e dell'estensione degli effetti di fiamme e fumo in modalità wireframe.*|
 
-![Shuttle launch gif](media/shuttle.gif)
-Simulazione del lancio dello space shuttle, fase di testing.
+|![Shuttle launch gif](media/shuttle.gif)|
+|*--*|
+|*Simulazione del lancio dello space shuttle, fase di testing.*|
+</p>
