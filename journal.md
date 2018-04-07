@@ -78,3 +78,10 @@
     * sostituzione del metodo lookAt() con l'impostazione dell'attributo target di OrbitControls;
     * impostazione della posizione iniziale della camera;
     * impostazione degli attributi autoRotate e autoRotateSpeed dei controlli.
+* Creazione di un ambiente complessivo (environment) che contiene lo space shuttle, la torre e la piattaforma di lancio.
+* Definizione della funzione Reposition():
+    * controllo del movimento di riposizionamento dello shuttle e delle braccia della torre alle posizioni originarie una volta che l'animazione è terminata;
+    * dichiarazione e istanziazione delle variabili riposizionato, angolo_return.
+* Ri-definizione della funzione Launch():
+    * aggiunta del controllo della durata dell'animazione e gestione della visibilità delle fiamme e del fumo durante il riposizionamento;
+    * reset della posizione e del movimento della camera alla fine dell'animazione.s
