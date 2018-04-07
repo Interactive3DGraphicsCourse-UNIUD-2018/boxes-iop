@@ -16,7 +16,6 @@ Come è possibile attestare, l'intero codice è contenuto in un unico file compl
 ## Parte 5: risultati
 Vengono presentati di seguito alcuni screenshot del lavoro in fase di sviluppo e a lavoro finito, accompagnato da alcune gif integrative.
 
-<p align="center>
 |![Shuttle building](media/screen0.png)|
 |:--:|
 |*Costruzione dello space shuttle.*|
@@ -32,4 +31,3 @@ Vengono presentati di seguito alcuni screenshot del lavoro in fase di sviluppo e
 |![Shuttle launch gif](media/shuttle.gif)|
 |*--*|
 |*Simulazione del lancio dello space shuttle, fase di testing.*|
-</p>
