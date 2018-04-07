@@ -35,3 +35,7 @@ Vengono presentati di seguito alcuni screenshot del lavoro in fase di sviluppo e
 |![Shuttle reppsitioning gif](media/shuttle2.gif)|
 |:--:|
 |*Simulazione del riposizionamenti dello space shuttle, una volta che si è esaurita l'animazione.*|
+
+|![Shuttle reppsitioning gif](media/screen4.png)|
+|:--:|
+|*Costruzione del terreno.*|
