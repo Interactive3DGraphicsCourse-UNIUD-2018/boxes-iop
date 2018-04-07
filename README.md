@@ -14,4 +14,5 @@ Per evitare una riduzione degli fps ulteriore, considerando che già le animazio
 Come è possibile attestare, l'intero codice è contenuto in un unico file complessivo, che non ricorre quindi a chiamate esterne se non alla libreria di three.js. La decisione è dovuta principalmente alla necessità di avere sempre il codice sotto mano per tutte le componenti (strutturali e di animazione), oltre a facilitare la gestione delle variabili globali e il passaggio di parametri tra le funzioni. Durante lo sviluppo del progetto si è adottato, in generale, un approccio "incrementale": si procedeva per piccole introduzioni, che venivano testate isolatamente, per poi venire integrate a gruppi o singolarmente; ad ogni step si verificava che il codice funzionasse come desiderato prima di procedere allo step successivo. Particolare cura è stata posta nella regolazione dei parametri di animazione, in ottica di un risparmio di fps e in vista della generazione finale del terreno (vedi parte 3). Una volta introdotte tutte le componenti nel codice, ci si è preoccupati di aggiustare i dettagli di presentazione.
 
 ## Parte 5: risultati
-Vengono presentati di seguito alcuni screenshot del lavoro finito...
+Vengono presentati di seguito alcuni screenshot del lavoro in fase di sviluppo e a lavoro finito, accompagnato da alcune gif integrative.
+![Shuttle launch gif](media/shuttle.gif)
