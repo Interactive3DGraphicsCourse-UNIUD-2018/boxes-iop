@@ -35,7 +35,7 @@
             //variabili per la torre
             var larghezza_tower, altezza_tower, spessore_tower;
             var tower, tower_top_arm, tower_mid_arm_top, tower_mid_arm_base;
-            var angolo;
+            var angolo, angolo_return;
 
             //variabili per la base di lancio
             var larghezza_base, altezza_base, spessore_base;
@@ -49,7 +49,7 @@
             //var flames;
             var flames1, flames2, flames3, flames4, flames5;
 
-            var angolo_return;
+            var environment;
 
             function Start() { //chiamo le funzioni di costruzione del paesaggio e dello space shuttle
                 scene = new THREE.Scene();
@@ -74,6 +74,8 @@
                 larghezza_base = 200;
                 altezza_base = 50;
                 spessore_base = 200;
+
+                environment = new THREE.Object3D();
 
                 shuttle = new THREE.Object3D();
                 propulsore1 = new THREE.Object3D();
@@ -117,7 +119,7 @@
 
                 shuttle.position.set(-(larghezza_tower/3), altezza_shuttle*1.4, 0);
 
-                scene.add(shuttle);
+                //scene.add(shuttle);
 
                 //aggiunta della torre
                 tower = new THREE.Object3D();
@@ -130,7 +132,7 @@
                 tower.add(tower_top_arm);
 
                 tower.position.set(-(larghezza_base/2 + larghezza_tower), altezza_tower/10, 0);
-                scene.add(tower);
+                //scene.add(tower);
                 angolo = 0;
                 angolo_return = 0;
 
@@ -139,10 +141,15 @@
                 Launch_base();
 
                 launch_base.position.set(0, altezza_base/2, 0);
-                scene.add(launch_base);
+                //scene.add(launch_base);
 
                 durataAnimazione = 40000;
                 riposizionato = false;
+
+                environment.add(shuttle);
+                environment.add(tower);
+                environment.add(launch_base);
+                scene.add(environment);
 
                 //riquadro fps
                 stats = new Stats();
@@ -877,6 +884,8 @@
 
             Start();
             Update();
+
+            //AUMENTARE LA DIMENSIONE DEI CUBI DEL TERRAIN NELLA GEOMETRY, E POI CREARE UNA SKYSPHERE DI RAGGIO COME IL LATO TOTALE COSì DA PRENDERE TUTTO IL TERRAIN
         </script>
     </body>
 </html>
