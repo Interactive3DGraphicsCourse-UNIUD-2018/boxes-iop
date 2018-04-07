@@ -57,9 +57,6 @@
                 renderer.setClearColor(0x3333aa);
                 document.body.appendChild(renderer.domElement);
 
-                camera.position.set(150,200,300);
-                camera.lookAt(new THREE.Vector3(0,0,0));
-
                 //dimensioni del blocco centrale, su cui vengono proporzionate tutte le altre componenti
                 larghezza_shuttle = 30;
                 altezza_shuttle = 100;
@@ -149,12 +146,12 @@
                 stats.domElement.style.top = '0px';
                 document.body.appendChild(stats.domElement);
 
-                //visualizzo gli assi
-                Coordinates.drawAllAxes();
-
                 //controlli orbitali
                 controls = new THREE.OrbitControls(camera);
                 controls.addEventListener('change', Render);
+                
+                camera.position.set(150,500,200);
+                camera.lookAt(shuttle.position);
             }
 
             function Flames_creation(dim, flames) {
@@ -167,7 +164,7 @@
                 flames_materials[4] = new THREE.MeshBasicMaterial({ color:  0xf5edaa });
 
                 for (var i = 0; i < 200; i++) {
-                  flames[i] = new THREE.Mesh(flames_geometry, flames_materials[Math.trunc(Math.random()*(flames_materials.length))]);
+                    flames[i] = new THREE.Mesh(flames_geometry, flames_materials[Math.trunc(Math.random()*(flames_materials.length))]);
 
                   var x = Math.random()* dim - dim/2;
                   var z = Math.random()* dim - dim/2;
