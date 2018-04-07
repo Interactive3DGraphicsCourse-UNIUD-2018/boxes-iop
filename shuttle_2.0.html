@@ -49,6 +49,8 @@
             //var flames;
             var flames1, flames2, flames3, flames4, flames5;
 
+            var angolo_return;
+
             function Start() { //chiamo le funzioni di costruzione del paesaggio e dello space shuttle
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000);
@@ -130,6 +132,7 @@
                 tower.position.set(-(larghezza_base/2 + larghezza_tower), altezza_tower/10, 0);
                 scene.add(tower);
                 angolo = 0;
+                angolo_return = 0;
 
                 //aggiunta della base di lancio
                 launch_base = new THREE.Object3D();
@@ -138,8 +141,7 @@
                 launch_base.position.set(0, altezza_base/2, 0);
                 scene.add(launch_base);
 
-                time = Date.now();
-                durataAnimazione = 10000;
+                durataAnimazione = 40000;
                 riposizionato = false;
 
                 //riquadro fps
@@ -794,6 +796,7 @@
                     tower_mid_arm_top.position.x -= 0.05;
                 }
                 angolo += 0.1;
+                angolo_return += 0.1;
                 time = Date.now();
             }
 
@@ -801,6 +804,12 @@
                 var currentTime = Date.now();
                 if (currentTime - time < durataAnimazione) {
                     shuttle.position.y += 0.5;
+                    flames_propulsore1.visible = true;
+                	flames_propulsore2.visible = true;
+                	flames_propulsore3.visible = true;
+                	flames_razzo_dx.visible = true;
+                	flames_razzo_sx.visible = true;
+                	smoke_column.visible = true;
                     Flames_animation(larghezza_shuttle/3, propulsore1, flames_propulsore1, flames1, 60);
                     Flames_animation(larghezza_shuttle/3, propulsore2, flames_propulsore2, flames2, 60);
                     Flames_animation(larghezza_shuttle/3, propulsore3, flames_propulsore3, flames3, 60);
@@ -817,6 +826,8 @@
                 	flames_razzo_dx.visible = false;
                 	flames_razzo_sx.visible = false;
                 	smoke_column.visible = false;
+
+                	controls.autoRotate = false;
                 	Reposition();
 
                 }
@@ -826,6 +837,14 @@
             	if (riposizionato == true) {
             		if (shuttle.position.y >= altezza_shuttle*1.4) {
             			shuttle.position.y = (altezza_shuttle*1.4);
+            			if (angolo_return >= 0) {
+            				tower_top_arm.rotation.y += Math.PI * 0.1 / 180;
+                    		tower_mid_arm_top.position.x += 0.05;
+                    		angolo_return -= 0.1;
+            			} else {
+            				angolo = 0;
+            				angolo_return = 0;
+            			}
             		} else {
             			shuttle.position.y += (altezza_shuttle*1.4 / 100);
             		}
