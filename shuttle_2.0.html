@@ -30,6 +30,7 @@
             var shuttle, external_tank, razzo_dx, razzo_sx, propulsore1, propulsore2, propulsore3;
             var larghezza_shuttle, altezza_shuttle, spessore_shuttle;
             var durataAnimazione, time;
+            var riposizionato;
 
             //variabili per la torre
             var larghezza_tower, altezza_tower, spessore_tower;
@@ -110,7 +111,7 @@
                 Flames_creation(larghezza_shuttle/2, flames5);
 
                 smoke_column = new THREE.Object3D();
-                Smoke_creation(larghezza_shuttle*2);
+                Smoke_creation(larghezza_shuttle*3);
 
                 shuttle.position.set(-(larghezza_tower/3), altezza_shuttle*1.4, 0);
 
@@ -138,7 +139,8 @@
                 scene.add(launch_base);
 
                 time = Date.now();
-                durataAnimazione = 60000;
+                durataAnimazione = 10000;
+                riposizionato = false;
 
                 //riquadro fps
                 stats = new Stats();
@@ -152,7 +154,6 @@
                 
                 camera.position.set(100,200,250);
                 controls.target = shuttle.position;
-                // controls.autoRotate = true;
                 controls.autoRotateSpeed = 4;
             }
 
@@ -214,8 +215,8 @@
             }
 
             function Smoke_creation(dim) {
-                var smoke_geometry = new THREE.BoxGeometry(2,2,2);
-                var smoke_material = new THREE.MeshBasicMaterial({ color: 0xcccccc});
+                var smoke_geometry = new THREE.BoxGeometry(4,4,4);
+                var smoke_material = new THREE.MeshBasicMaterial({ color: 0xcccccc });
                 smoke = new Array();
                 for (var i = 0; i < 1000; i++) {
                     smoke[i] = new THREE.Mesh(smoke_geometry, smoke_material);
@@ -245,10 +246,10 @@
                         var posz = smoke_column.children[i].position.z;
                         posy -= 0.5;
                         var soglia;
-                        if (shuttle.position.y <= 200) {
+                        if (shuttle.position.y <= 250) {
                             soglia = 0;
                         } else {
-                            soglia = shuttle.position.y - 200;
+                            soglia = shuttle.position.y - 250;
                         }
                         if (posy <= soglia) {
                           	var x = Math.random()* dim - dim/2;
@@ -805,11 +806,33 @@
                     Flames_animation(larghezza_shuttle/3, propulsore3, flames_propulsore3, flames3, 60);
                     Flames_animation(larghezza_shuttle/2, razzo_dx, flames_razzo_dx, flames4, 80);
                     Flames_animation(larghezza_shuttle/2, razzo_sx, flames_razzo_sx, flames5, 80);
-                    Smoke_animation(larghezza_shuttle*2);
+                    Smoke_animation(larghezza_shuttle*3);
 
                     controls.autoRotate = true;
                     camera.position.y += 0.5;
+                } else {
+                	flames_propulsore1.visible = false;
+                	flames_propulsore2.visible = false;
+                	flames_propulsore3.visible = false;
+                	flames_razzo_dx.visible = false;
+                	flames_razzo_sx.visible = false;
+                	smoke_column.visible = false;
+                	Reposition();
+
                 }
+            }
+
+            function Reposition() {
+            	if (riposizionato == true) {
+            		if (shuttle.position.y >= altezza_shuttle*1.4) {
+            			shuttle.position.y = (altezza_shuttle*1.4);
+            		} else {
+            			shuttle.position.y += (altezza_shuttle*1.4 / 100);
+            		}
+            	} else {
+            		shuttle.position.y = -(altezza_shuttle*1.4);
+            		riposizionato = true;
+            	}
             }
 
             function Animation() {
