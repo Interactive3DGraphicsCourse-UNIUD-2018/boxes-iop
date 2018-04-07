@@ -91,33 +91,31 @@
 				//get height data from img
 				var data = getHeightData(img,0.1);
                 
-                /*var x = 0;
-                var terreno = [img.width][img.height];
-                var material = new THREE.MeshBasicMaterial({color: 0xaaaaaa});
                 var geometry = new THREE.BoxGeometry(1,1,1);
-                for (var i = 0; i < img.width; i++) {
-                    for (var j = 0; j < img.height; j++) {
-                        terreno[i][j] = new THREE.Mesh(geometry, material);
-                        terreno[i][j].position.set(i, data[x], j);
-                        x++;
-                        scene.add(terreno[i][j]);
-                    }
-                }*/
+                var material1 = new THREE.MeshBasicMaterial({color: 0xdee334});
+                var material2 = new THREE.MeshBasicMaterial({color: 0x208c0d});
+                var material3 = new THREE.MeshBasicMaterial({color: 0x8c7d62});
                 
-                var geometry = new THREE.BoxGeometry(1,1,1);
-                var terrain = new THREE.Group();
-                
-                for (var i = 0; i < data.height; i++) {
-                    for (var j = 0; j < data.width; j++) {
-                        var y = data.map[i*data.width+j];
-                        if (y != 0) {
-                            var cube = new THREE.Mesh(geometry, material);
-                            cube.position.set(j+.5, 0, i+.5);
-                            cube.scale.y = y;
-                            cube.position.y = y/2;
-                            terrain.add(cube);
-                        }
-                    }
+                var x = 0;
+                var terreno = [img.width];					for(i = 0; i < img.width; i++){
+                    terreno[i] = [img.height];
+					for(j = 0; j < img.height; j++){
+                        if(data[x] <= 10){
+                            terreno[i][j] = new THREE.Mesh( geometry, material1);
+						}else if(data[x] > 13){
+							terreno[i][j] = new THREE.Mesh( geometry, material3);
+                        }else{
+							terreno[i][j] = new THREE.Mesh( geometry, material2);
+						}
+						
+                        //Per avere una posizione in altezza coerente traslo anche su x
+						terreno[i][j].position.set(i, data[x]/4, j);
+							
+                        //L'altezza e quindi la scalatura su y viene data dal valore di data[x]
+						terreno[i][j].scale.y = data[x]/2;
+						x++;
+				        scene.add(terreno[i][j]);
+					}
                 }
 			}
             
