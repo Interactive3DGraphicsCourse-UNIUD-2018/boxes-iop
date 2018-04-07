@@ -84,4 +84,8 @@
     * dichiarazione e istanziazione delle variabili riposizionato, angolo_return.
 * Ri-definizione della funzione Launch():
     * aggiunta del controllo della durata dell'animazione e gestione della visibilità delle fiamme e del fumo durante il riposizionamento;
-    * reset della posizione e del movimento della camera alla fine dell'animazione.s
+    * reset della posizione e del movimento della camera alla fine dell'animazione.
+* Creazione del terreno su cui poggia lo space shuttle a partire da una height map:
+    * integrazione della funzione getHeightData();
+    * definizione della funzione Terreno();
+    * dichiarazione e istanziazione delle variabili data, geometry, material1, material2, material3, terreno, img.

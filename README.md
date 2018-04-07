@@ -39,4 +39,3 @@ Vengono presentati di seguito alcuni screenshot del lavoro in fase di sviluppo e
 |![Shuttle reppsitioning gif](media/screen4.png)|
 |:--:|
 |*Costruzione del terreno.*|
-
