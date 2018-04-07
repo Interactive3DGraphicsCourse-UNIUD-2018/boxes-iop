@@ -72,3 +72,9 @@
 * Definizione della funzione Flames_animation:
     * dichiarazione e istanziazione delle variabili pivot_reference, pivot;
     * chiamata al metodo in Launch() tramite le variabili flames_propulsore1, flames_propulsore2, flames_propulsore3, flames_razzo_dx,flames_razzo_sx, flames1, flames2, flames3, flames4, flames5.
+    
+## 07-04-2018
+* Movimento della camera in modo che segua lo space shuttle durante l'animazione:
+    * sostituzione del metodo lookAt() con l'impostazione dell'attributo target di OrbitControls;
+    * impostazione della posizione iniziale della camera;
+    * impostazione degli attributi autoRotate e autoRotateSpeed dei controlli.
