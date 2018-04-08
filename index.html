@@ -248,12 +248,14 @@
                             }else{
                                 terreno[i][j] = new THREE.Mesh( geometry, material2);
                             }
+
+                            var scale_value = data[x];
                             
                             //Per avere una posizione in altezza coerente traslo anche su x
-                            terreno[i][j].position.set(i, data[x]/4, j);
+                            terreno[i][j].position.set(i, scale_value/2, j);
                                 
                             //L'altezza e quindi la scalatura su y viene data dal valore di data[x]
-                            terreno[i][j].scale.y = data[x]/2;
+                            terreno[i][j].scale.y = scale_value;
                             x++;
                             scene.add(terreno[i][j]);
                         }
