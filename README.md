@@ -22,7 +22,7 @@ Inizialmente l'idea per le animazioni era quella di permettere all'utente di con
 Per evitare una riduzione degli fps ulteriore, considerando che già le animazioni risultano piuttosto impegnative da questo punto di vista, lo sviluppo del terreno a partire da una heightmap è stato volutamente progettato in maniera essenziale e "minimalista". In virtù di questo, la mappatura dei livelli di grigio in tipologie di terreno distinte è implementata per "fasce": ai valori di grigio inferiori a una certa soglia corrisponde un colore simile a quello dell'acqua, a quelli superiori a un'altra soglia corrispondono dei colori che emulano la terra, a quelli compresi tra esse dei colori che ricordano la sabbia. La mappatura dei livelli di grigio avviene anche, ovviamente, sull'altezza dei box che compongono il terreno, uno per ogni pixel logico della heightmap. La scelta di non applicare una texture a ognuno di essi, bensì un colore "piatto", è dovuta a una questione di uniformità a uno stile volutamente cartoon, dalle forme squadrate e colori vivaci.
 Per quanto riguarda lo sfondo della scena, per non accontentarsi di un banale colore azzurro cielo si è optato per la generazione di una sfera contenitiva dello space shuttle e del terreno su cui poggia. L'obiettivo è chiaramente quello di applicarvi una texture sulla faccia interna, che risulta essere l'unica visibile, raffigurante un ambiente "spaziale".
 
-|![Star background](textures/2k_stars.png)|
+|![Star background](textures/2k_stars.jpg)|
 |:--:|
 |*Sfondo utilizzato nella faccia interna della sfera, trovato in [questo sito](https://www.solarsystemscope.com/textures/).*|
 
@@ -31,3 +31,19 @@ Come è possibile attestare, l'intero codice è contenuto in un unico file compl
 
 ## Parte 6: risultati
 Vengono presentati di seguito alcuni screenshot del lavoro in fase di sviluppo e a lavoro finito, accompagnato da alcune gif integrative.
+
+|![Shuttle still](media/screen6.png)|
+|:--:|
+|*Space shuttle fermo sulla base di lancio, con sfondo stellato e terreno "lunare".*|
+
+|![Shuttle animation](media/screen7.png)|
+|:--:|
+|*Space shuttle in fase di partenza, con effetti di fiamme e fumo che si sprigionano dai propulsori.*|
+
+|![Star background](media/shuttle4.gif)|
+|:--:|
+|*Fase di lancio dello space shuttle, una volta aperte del tutto le braccia della torre, con movimento panoramico della camera.*|
+
+|![Star background](media/shuttle3.gif)|
+|:--:|
+|*Fase di riposizionamento dello space shuttle sulla base di lancio, una volta terminata l'animazione*|
