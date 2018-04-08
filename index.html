@@ -206,7 +206,7 @@
                 var sky_dim = 3000;
                 var Sky_geometry = new THREE.SphereGeometry(sky_dim, 32, 32);
                 var loader = new THREE.TextureLoader(),
-                texture = loader.load( "textures/sky.jpg");
+                texture = loader.load( "textures/2k_stars.jpg");
                 var Sky_material = new THREE.MeshBasicMaterial({ map: texture });
 
                 var skySphere = new THREE.Mesh(Sky_geometry, Sky_material);
