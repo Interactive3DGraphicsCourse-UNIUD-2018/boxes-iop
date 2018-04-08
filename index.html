@@ -181,7 +181,7 @@
                 environment.add(flames_razzo_sx);
                 environment.add(camera);
 
-                environment.position.set(2000,30,2000);
+                environment.position.set(3250,250,2100);
                 scene.add(environment);
 
                 //riquadro fps
@@ -260,8 +260,10 @@
                     
                     var geometry = new THREE.BoxGeometry(dimx, dimy, dimz);
                     var material1 = new THREE.MeshBasicMaterial({color: 0x4169e1});
-                    var material2 = new THREE.MeshBasicMaterial({color: 0x228b22});
+                    var material2 = new THREE.MeshBasicMaterial({color: 0x806210});
                     var material3 = new THREE.MeshBasicMaterial({color: 0x663333});
+                    var material4 = new THREE.MeshBasicMaterial({color: 0xd2b06a});
+                    var material5 = new THREE.MeshBasicMaterial({color: 0x412000});
                     
                     var x = 0;
                     var terreno = [img.width];					
@@ -270,13 +272,17 @@
                         for(j = 0; j < img.height; j++){
                             if(data[x] <= 10){
                                 terreno[i][j] = new THREE.Mesh( geometry, material1);
-                            }else if(data[x] > 13){
-                                terreno[i][j] = new THREE.Mesh( geometry, material3);
-                            }else{
+                            }else if(data[x] > 13 && data[x] <= 15){
                                 terreno[i][j] = new THREE.Mesh( geometry, material2);
+                            }else if(data[x] > 15 && data[x] <= 25){
+                                terreno[i][j] = new THREE.Mesh( geometry, material3);
+                            }else if(data[x] > 25){
+                                terreno[i][j] = new THREE.Mesh( geometry, material5);
+                            }else{
+                                terreno[i][j] = new THREE.Mesh( geometry, material4);
                             }
 
-                            var scale_value = 4*data[x];
+                            var scale_value = 20*data[x];
                             
                             //Per avere una posizione in altezza coerente traslo anche su x
                             terreno[i][j].position.set(i*dimx, scale_value/2, j*dimz);
@@ -290,7 +296,7 @@
 			    }
         
 			    // load img source
-                img.src = "textures/heightmap2.png";
+                img.src = "textures/heightmap3.png";
             }
 
             //funzione di creazione delle fiamme
