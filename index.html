@@ -167,7 +167,7 @@
                 launch_base.position.set(0, altezza_base/2, 0);
 
                 //inizializzazione delle variabili necessarie per l'animazione dello shuttle
-                durataAnimazione = 10000;
+                durataAnimazione = 25000;
                 riposizionato = false;
 
                 //aggiunta degli oggetti al pivot esterno e successiva aggiunta di questo alla scena
@@ -180,6 +180,8 @@
                 environment.add(flames_razzo_dx);
                 environment.add(flames_razzo_sx);
                 environment.add(camera);
+
+                camera.position.set(120,150,200);
 
                 environment.position.set(3250,250,2100);
                 scene.add(environment);
@@ -197,9 +199,9 @@
                 SkySphere();
                 
                 //posizionamento e controllo della camera
-                camera.position.set(75,200,200);
                 controls.target = shuttle.position;
                 controls.autoRotateSpeed = 4;
+                controls.maxDistance = 200;
             }
 
             function SkySphere() {
@@ -936,7 +938,7 @@
 
             //funzione di animazione dello shuttle
             function Launch() {
-                var speed = 1.5;
+                var speed = 0.5;
                 var currentTime = Date.now();
                 if (currentTime - time < durataAnimazione) {
                     shuttle.position.y += speed;
@@ -992,11 +994,12 @@
             			}
             		} else {
             			shuttle.position.y += (altezza_shuttle*1.4 / 100);
+                        camera.position.y += (altezza_shuttle*1.4 /100);
             		}
             	} else {
             		shuttle.position.y = -(altezza_shuttle*1.4);
             		riposizionato = true;
-                    camera.position.set(200,300,500);
+                    camera.position.set(100,-120,200);
             	}
             }
 
