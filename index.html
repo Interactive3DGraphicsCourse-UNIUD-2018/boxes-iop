@@ -52,6 +52,7 @@
             var flames1, flames2, flames3, flames4, flames5;
 
             var environment;
+            var skySphere;
 
             
             /* FUNZIONI */
@@ -180,7 +181,7 @@
                 environment.add(flames_razzo_sx);
                 environment.add(camera);
 
-                environment.position.set(350,30,300);
+                environment.position.set(2000,30,2000);
                 scene.add(environment);
 
                 //riquadro fps
@@ -192,11 +193,26 @@
                 //controlli orbitali
                 controls = new THREE.OrbitControls(camera);
                 controls.addEventListener('change', Render);
+
+                SkySphere();
                 
                 //posizionamento e controllo della camera
-                camera.position.set(100,200,250);
+                camera.position.set(75,200,200);
                 controls.target = shuttle.position;
                 controls.autoRotateSpeed = 4;
+            }
+
+            function SkySphere() {
+                var sky_dim = 3000;
+                var Sky_geometry = new THREE.SphereGeometry(sky_dim, 32, 32);
+                var loader = new THREE.TextureLoader(),
+                texture = loader.load( "textures/sky.jpg");
+                var Sky_material = new THREE.MeshBasicMaterial({ map: texture });
+
+                var skySphere = new THREE.Mesh(Sky_geometry, Sky_material);
+                skySphere.material.side = THREE.BackSide;
+                skySphere.position.set(sky_dim,0,sky_dim);
+                scene.add(skySphere);
             }
 
             //return array with height data from img, taken from: http://danni-three.blogspot.it/2013/09/threejs-heightmaps.html
@@ -238,11 +254,14 @@
                 img.onload = function () {
                     //get height data from img
                     var data = getHeightData(img,0.1);
+                    var dimx = 100;
+                    var dimy = 1;
+                    var dimz = 100;
                     
-                    var geometry = new THREE.BoxGeometry(10,2,10);
-                    var material1 = new THREE.MeshBasicMaterial({color: 0xdee334});
-                    var material2 = new THREE.MeshBasicMaterial({color: 0x208c0d});
-                    var material3 = new THREE.MeshBasicMaterial({color: 0x8c7d62});
+                    var geometry = new THREE.BoxGeometry(dimx, dimy, dimz);
+                    var material1 = new THREE.MeshBasicMaterial({color: 0x4169e1});
+                    var material2 = new THREE.MeshBasicMaterial({color: 0x228b22});
+                    var material3 = new THREE.MeshBasicMaterial({color: 0x663333});
                     
                     var x = 0;
                     var terreno = [img.width];					
@@ -257,10 +276,10 @@
                                 terreno[i][j] = new THREE.Mesh( geometry, material2);
                             }
 
-                            var scale_value = 2*data[x];
+                            var scale_value = 4*data[x];
                             
                             //Per avere una posizione in altezza coerente traslo anche su x
-                            terreno[i][j].position.set(i*10, scale_value/2, j*10);
+                            terreno[i][j].position.set(i*dimx, scale_value/2, j*dimz);
                                 
                             //L'altezza e quindi la scalatura su y viene data dal valore di data[x]
                             terreno[i][j].scale.y = scale_value;
@@ -378,7 +397,7 @@
             //funzione di creazione della base di lancio
             function Launch_base() {
 
-	    	    var base_material = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: false });
+	    	    var base_material = new THREE.MeshBasicMaterial({ color: 0x888888 });
 
 	    	    var x = larghezza_base/2 - larghezza_base/14;
 	    	    var y = altezza_base/2 + altezza_base/10;
@@ -412,8 +431,8 @@
             //funzione di creazione della torre
             function Tower() {
 
-                var tower_grey_material = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: false });
-                var tower_dark_grey_material = new THREE.MeshBasicMaterial({ color: 0x333333, wireframe: false });
+                var tower_grey_material = new THREE.MeshBasicMaterial({ color: 0x888888 });
+                var tower_dark_grey_material = new THREE.MeshBasicMaterial({ color: 0x333333 });
 
                 //torre
                 var tower_base_geometry = new THREE.BoxGeometry(larghezza_tower, altezza_tower/20, spessore_tower);
@@ -911,9 +930,10 @@
 
             //funzione di animazione dello shuttle
             function Launch() {
+                var speed = 1.5;
                 var currentTime = Date.now();
                 if (currentTime - time < durataAnimazione) {
-                    shuttle.position.y += 0.5;
+                    shuttle.position.y += speed;
                     flames_propulsore1.visible = true;
                 	flames_propulsore2.visible = true;
                 	flames_propulsore3.visible = true;
@@ -928,7 +948,8 @@
                     Smoke_animation(larghezza_shuttle*3);
 
                     controls.autoRotate = true;
-                    camera.position.y += 0.5;
+                    riposizionato = false;
+                    camera.position.y += speed;
                 } else {
                 	flames_propulsore1.visible = false;
                 	flames_propulsore2.visible = false;
@@ -969,7 +990,7 @@
             	} else {
             		shuttle.position.y = -(altezza_shuttle*1.4);
             		riposizionato = true;
-                    camera.position.set(100,200,250);
+                    camera.position.set(200,300,500);
             	}
             }
 
@@ -998,7 +1019,7 @@
             Start();
             Update();
 
-            //AUMENTARE LA DIMENSIONE DEI CUBI DEL TERRAIN NELLA GEOMETRY, E POI CREARE UNA SKYSPHERE DI RAGGIO COME IL LATO TOTALE COSì DA PRENDERE TUTTO IL TERRAIN
+            //CREARE UNA SKYSPHERE DI RAGGIO COME IL LATO TOTALE COSì DA PRENDERE TUTTO IL TERRAIN
         </script>
     </body>
 </html>
