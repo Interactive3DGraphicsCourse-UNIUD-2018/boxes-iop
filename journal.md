@@ -36,6 +36,10 @@
 * Posizionamento dei razzi laterali dello space shuttle in modo che si trovino ai lati del serbatoio centrale, attaccati ad esso (sono due razzi sostanzialmente uguali ma distinti solo per la variabile pos in sinistro e destro).
 * Aggiunta dei razzi allo space shuttle come componenti.
 
+|![Shuttle building](media/screen0.png)|
+|:--:|
+|*Costruzione dello space shuttle.*|
+
 ## 30-03-2018
 * Costruzione della torre di lancio dello space shuttle:
     * definizione della funzione Tower();
@@ -55,6 +59,10 @@
     * definizione della funzione Arm_detachment();
     * definizione della funzione Launch();
     * dichiarazione e istanziazione delle variabili time e durataAnimazione.
+
+|![Shuttle positioning](media/screen2.png)|
+|:--:|
+|*Posizionamento dello space shuttle a veicolo fermo sulla piattaforma di lancio.*|
     
 ## 06-04-2018
 * Cambiamento dei piani near e far della camera per ridurre lo z-figthing.
@@ -72,6 +80,14 @@
 * Definizione della funzione Flames_animation:
     * dichiarazione e istanziazione delle variabili pivot_reference, pivot;
     * chiamata al metodo in Launch() tramite le variabili flames_propulsore1, flames_propulsore2, flames_propulsore3, flames_razzo_dx,flames_razzo_sx, flames1, flames2, flames3, flames4, flames5.
+
+|![Shuttle animation positioning](media/screen3.png)|
+|:--:|
+|*Regolazione della posizione e dell'estensione degli effetti di fiamme e fumo in modalità wireframe.*|
+
+|![Shuttle launch gif](media/shuttle.gif)|
+|:--:|
+|*Simulazione del lancio dello space shuttle, fase di testing.*|
     
 ## 07-04-2018
 * Movimento della camera in modo che segua lo space shuttle durante l'animazione:
@@ -89,3 +105,20 @@
     * integrazione della funzione getHeightData();
     * definizione della funzione Terreno();
     * dichiarazione e istanziazione delle variabili data, geometry, material1, material2, material3, terreno, img.
+
+|![Shuttle reppsitioning gif](media/shuttle2.gif)|
+|:--:|
+|*Simulazione del riposizionamenti dello space shuttle, una volta che si è esaurita l'animazione.*|
+
+|![Ground building from given heightmap](media/screen4.png)|
+|:--:|
+|*Costruzione del terreno.*|
+
+## 08-04-2018
+* Ridimensionamento e riposizionamento del terreno, in modo che l'environment poggi su di esso e non venga ridotto il frame rate della scena:
+    * ingrandimento dei cubi;
+    * variazione della posizione di ogni cubo e della scalatura sull'asse y in relazione a una variabile scale_value.
+
+|![Ground regolation](media/screen5.png)|
+|:--:|
+|*Integrazione, ingrandimento e riposizionamento del terreno.*|
