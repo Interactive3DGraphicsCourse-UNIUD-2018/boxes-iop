@@ -13,7 +13,7 @@ In una seconda fase, sono state progettate le prime animazioni da applicare succ
 
 |![Inspiration model](media/Shuttle_proiezioni.jpg)|
 |:--:|
-|*Modello d'ispirazione alle forme e ai colori dello space shuttle, trovato in [questo sito](https://www.solarsystemscope.com/textures/).*|
+|*Modello d'ispirazione alle forme e ai colori dello space shuttle, trovato in [questo sito](https://ideas.lego.com/projects/50a447cc-0acb-4fff-b3c9-41739fed157c).*|
 
 ## Parte 3: animazioni
 Inizialmente l'idea per le animazioni era quella di permettere all'utente di controllare quando far partire lo space shuttle, e far "scorrere" lo sfondo attorno ad esso in modo da produrre una transizione da un cielo atmosferico a uno spaziale. Tuttavia, per motivi di semplicità e per un desiderio di sviluppare il meglio possibile le animazioni legati al solo movimento dello shuttle, la maggior parte della concentrazione è stata posta nella realizzazione del riposizionamento del veicolo una volta finita l'animazione e nella cura degli effetti di fumo e fuoco, oltre al movimento delle braccia della torre di lancio. Quello che succede durante il suddetto riposizionamento è una modifica della visibilità del fumo e delle fiamme, in modo che i propulsori sembrino spenti, e un successivo riposizionamento una volta che lo shuttle è tornato alla posizione di partenza. Al posto del controllo dell'utente, l'intera animazione è stata fatta proseguire in loop all'infinito: non venendosi a creare nuovi oggetti durante i suddetti effetti legati al movimento, il frame rate non ne soffre.
@@ -24,7 +24,7 @@ Per quanto riguarda lo sfondo della scena, per non accontentarsi di un banale co
 
 |![Star background](textures/2k_stars.png)|
 |:--:|
-|*Sfondo utilizzato nella faccia interna della sfera, trovato in [questo sito](https://ideas.lego.com/projects/50a447cc-0acb-4fff-b3c9-41739fed157c).*|
+|*Sfondo utilizzato nella faccia interna della sfera, trovato in [questo sito](https://www.solarsystemscope.com/textures/).*|
 
 ## Parte 5: integrazione del codice
 Come è possibile attestare, l'intero codice è contenuto in un unico file complessivo, che non ricorre quindi a chiamate esterne se non alla libreria di three.js. La decisione è dovuta principalmente alla necessità di avere sempre il codice sotto mano per tutte le componenti (strutturali e di animazione), oltre a facilitare la gestione delle variabili globali e il passaggio di parametri tra le funzioni. Durante lo sviluppo del progetto si è adottato, in generale, un approccio "incrementale": si procedeva per piccole introduzioni, che venivano testate isolatamente, per poi venire integrate a gruppi o singolarmente; ad ogni step si verificava che il codice funzionasse come desiderato prima di procedere allo step successivo. Particolare cura è stata posta nella regolazione dei parametri di animazione, in ottica di un risparmio di fps e in vista della generazione finale del terreno (vedi parte 3). Una volta introdotte tutte le componenti nel codice, ci si è preoccupati di aggiustare i dettagli di presentazione.
