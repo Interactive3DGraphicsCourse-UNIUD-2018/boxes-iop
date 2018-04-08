@@ -118,6 +118,12 @@
 * Ridimensionamento e riposizionamento del terreno, in modo che l'environment poggi su di esso e non venga ridotto il frame rate della scena:
     * ingrandimento dei cubi;
     * variazione della posizione di ogni cubo e della scalatura sull'asse y in relazione a una variabile scale_value.
+* Inserimento dell'environment e del terreno in una sfera, nella cui faccia interna è stata applicata uno sfondo come texture:
+    * impostazione delle dimensioni della sfera;
+    * dichiarazione e istanziazione delle variabili skySphere, Sky_geometry, loader, Sky_material;
+    * impostazione di una distanza massima di zoom out per evitare la fuoriuscita dalla sfera contenitiva.
+* Modifica dei livelli di grigio su cui mappare l'altezza dei vari strati del terreno.
+* Controllo della durata dell'animazione.
 
 |![Ground regolation](media/screen5.png)|
 |:--:|
