@@ -87,7 +87,7 @@
                 environment = new THREE.Object3D();
 
                 //creazione e posizionamento del terreno
-                //Terreno();
+                Terreno();
 
                 //creazione dello shuttle e dei pivot interni ad esso
                 shuttle = new THREE.Object3D();
@@ -231,10 +231,10 @@
                     //get height data from img
                     var data = getHeightData(img,0.1);
                     
-                    var geometry = new THREE.BoxGeometry(250,10,250);
-                    var material1 = new THREE.MeshBasicMaterial({color: 0xdee334, wireframe: true});
-                    var material2 = new THREE.MeshBasicMaterial({color: 0x208c0d, wireframe: true});
-                    var material3 = new THREE.MeshBasicMaterial({color: 0x8c7d62, wireframe: true});
+                    var geometry = new THREE.BoxGeometry(1,1,1);
+                    var material1 = new THREE.MeshBasicMaterial({color: 0xdee334});
+                    var material2 = new THREE.MeshBasicMaterial({color: 0x208c0d});
+                    var material3 = new THREE.MeshBasicMaterial({color: 0x8c7d62});
                     
                     var x = 0;
                     var terreno = [img.width];					
@@ -253,7 +253,7 @@
                             terreno[i][j].position.set(i, data[x]/4, j);
                                 
                             //L'altezza e quindi la scalatura su y viene data dal valore di data[x]
-                            terreno[i][j].scale.y = data[x];
+                            terreno[i][j].scale.y = data[x]/2;
                             x++;
                             scene.add(terreno[i][j]);
                         }
